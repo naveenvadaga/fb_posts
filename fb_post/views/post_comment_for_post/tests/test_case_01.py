@@ -1,19 +1,13 @@
 """
 # TODO: Update test case description
 """
-
-from django_swagger_utils.drf_server.utils.server_gen.custom_api_test_case import CustomAPITestCase
+from django_swagger_utils.utils.test import CustomAPITestCase
 
 from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
 
 REQUEST_BODY = """
 {
     "comment_content": "string"
-}
-"""
-RESPONSE_BODY = """
-{
-    "id": 1
 }
 """
 
@@ -26,11 +20,7 @@ TEST_CASE = {
                                  "type": "oauth2"}},
         "body": REQUEST_BODY,
     },
-    "response": {
-        "header_params": {},
-        "body": RESPONSE_BODY,
-        "status": 200
-    }
+
 }
 
 
@@ -41,11 +31,6 @@ class TestCase01PostCommentForPostAPITestCase(CustomAPITestCase):
     url_suffix = URL_SUFFIX
     test_case_dict = TEST_CASE
 
-    def __init__(self, *args, **kwargs):
-        super(TestCase01PostCommentForPostAPITestCase, self).__init__(APP_NAME, OPERATION_NAME, REQUEST_METHOD,
-                                                                      URL_SUFFIX,
-                                                                      TEST_CASE, *args, **kwargs)
-
     def setupUser(self, username, password):
         pass
 
@@ -55,10 +40,22 @@ class TestCase01PostCommentForPostAPITestCase(CustomAPITestCase):
         self.post = create_post(self.foo_user.id, "content")
 
         TEST_CASE['request']['path_params']['post_id'] = self.post.id
-
+        # CustomAPITestCase.test_case_dict = TEST_CASE
         self.count_before_comment = Comment.objects.all().count()
-        super(TestCase01PostCommentForPostAPITestCase, self).test_case()
+        self.default_test_case()
 
+    def _assert_snapshots(self, response):
+        super(TestCase01PostCommentForPostAPITestCase, self)._assert_snapshots(response)
+        from fb_post.models_utility_functions import Comment
+        count_after_comment = Comment.objects.all().count()
+        import json
+        response_body = json.loads(response.content)
+        comment = Comment.objects.get(id=response_body['id'])
+        self.assert_match_snapshot(count_after_comment - self.count_before_comment, name='count')
+        self.assert_match_snapshot(comment.comment_content, name='comment_content')
+        self.assert_match_snapshot(comment.person.username, name='comment_person')
+
+    '''
     def compareResponse(self, response, test_case_response_dict):
         super(TestCase01PostCommentForPostAPITestCase, self).compareResponse(response, test_case_response_dict)
         from fb_post.models_utility_functions import Comment
@@ -68,4 +65,4 @@ class TestCase01PostCommentForPostAPITestCase(CustomAPITestCase):
         response_body = json.loads(response.content)
         print(type(response_body['id']))
         assert self.count_before_comment + 1 == count_after_comment
-
+    '''

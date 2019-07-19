@@ -1,7 +1,7 @@
 """
 # TODO: Update test case description
 """
-from django_swagger_utils.drf_server.utils.server_gen.custom_api_test_case import CustomAPITestCase
+from django_swagger_utils.utils.test import CustomAPITestCase
 from freezegun import freeze_time
 
 from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
@@ -9,62 +9,6 @@ from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
 REQUEST_BODY = """
 
 """
-RESPONSE_BODY = """
-{
-    "post_id": 1,
-    "posted_by": {
-        "username": "username",
-        "id": 1,
-        "profile_pic_url": "https://dummy.url.com/pic.png"
-    },
-    "posted_at": "2012-01-14 03:21:34",
-    "post_content": "post content",
-    "reactions": {
-        "type": [
-            "haha"
-        ],
-        "count": 1
-    },
-    "comments": [
-        {
-            "comment_id": 1,
-            "commenter": {
-                "username": "username1",
-                "id": 2,
-                "profile_pic_url": "https://dummy.url.com/pic.png"
-            },
-            "commented_at": "2012-01-14 03:21:34",
-            "comment_content": "comment 1",
-            "replies_count": 1,
-            "reactions": {
-                "type": [
-                    "haha"
-                ],
-                "count": 1
-            },
-            "replies": [
-                {
-                    "comment_id": 2,
-                    "commenter": {
-                        "username": "username2",
-                        "id": 3,
-                        "profile_pic_url": "https://dummy.url.com/pic.png"
-                    },
-                    "commented_at": "2012-01-14 03:21:34",
-                    "comment_content": "reply for comment",
-                    "reactions": {
-                        "type": [],
-                        "count": 0
-                    }
-                }
-            ]
-        }
-    ],
-    "comments_count": 1
-}
-
-"""
-
 TEST_CASE = {
     "request": {
         "path_params": {"post_id": "1234"},
@@ -73,11 +17,7 @@ TEST_CASE = {
         "securities": {},
         "body": REQUEST_BODY,
     },
-    "response": {
-        "header_params": {},
-        "body": RESPONSE_BODY,
-        "status": 200
-    }
+
 }
 
 
@@ -87,11 +27,6 @@ class TestCase01GetPostDetailsAPITestCase(CustomAPITestCase):
     request_method = REQUEST_METHOD
     url_suffix = URL_SUFFIX
     test_case_dict = TEST_CASE
-
-    def __init__(self, *args, **kwargs):
-        super(TestCase01GetPostDetailsAPITestCase, self).__init__(APP_NAME, OPERATION_NAME, REQUEST_METHOD,
-                                                                  URL_SUFFIX,
-                                                                  TEST_CASE, *args, **kwargs)
 
     def setupUser(self, username, password):
         pass
@@ -124,7 +59,7 @@ class TestCase01GetPostDetailsAPITestCase(CustomAPITestCase):
         self.reply_count = 1
         TEST_CASE['request']['path_params']['post_id'] = self.post.id
 
-        super(TestCase01GetPostDetailsAPITestCase, self).test_case()
+        self.default_test_case()
 
     # def compareResponse(self, response, test_case_response_dict):
     #     import json

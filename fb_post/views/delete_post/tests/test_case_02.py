@@ -1,7 +1,7 @@
 """
 # TODO: Update test case description
 """
-from django_swagger_utils.drf_server.utils.server_gen.custom_api_test_case import CustomAPITestCase
+from django_swagger_utils.utils.test import CustomAPITestCase
 
 from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
 
@@ -20,11 +20,7 @@ TEST_CASE = {
         "body": REQUEST_BODY,
     },
 
-    "response": {
-        "header_params": {},
-        "body": RESPONSE_BODY,
-        "status": 200
-    }
+
 }
 
 
@@ -35,11 +31,6 @@ class TestCase02DeletePostAPITestCase(CustomAPITestCase):
     url_suffix = URL_SUFFIX
     test_case_dict = TEST_CASE
 
-    def __init__(self, *args, **kwargs):
-        super(TestCase02DeletePostAPITestCase, self).__init__(APP_NAME, OPERATION_NAME, REQUEST_METHOD,
-                                                              URL_SUFFIX,
-                                                              TEST_CASE, *args, **kwargs)
-
     def setupUser(self, username, password):
         pass
 
@@ -48,4 +39,4 @@ class TestCase02DeletePostAPITestCase(CustomAPITestCase):
         self.foo_user = self._create_user("username", "password")
         self.post = create_post(self.foo_user.id, "content")
         TEST_CASE['request']['path_params']['post_id'] = self.post.id
-        super(TestCase02DeletePostAPITestCase, self).test_case()
+        self.default_test_case()

@@ -1,7 +1,7 @@
 """
 # TODO: Update test case description
 """
-from django_swagger_utils.drf_server.utils.server_gen.custom_api_test_case import CustomAPITestCase
+from django_swagger_utils.utils.test import CustomAPITestCase
 
 from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
 
@@ -26,11 +26,7 @@ TEST_CASE = {
         "securities": {},
         "body": REQUEST_BODY,
     },
-    "response": {
-        "header_params": {},
-        "body": RESPONSE_BODY,
-        "status": 200
-    }
+
 }
 
 
@@ -40,11 +36,6 @@ class TestCase01GetPositiveReactedPostsAPITestCase(CustomAPITestCase):
     request_method = REQUEST_METHOD
     url_suffix = URL_SUFFIX
     test_case_dict = TEST_CASE
-
-    def __init__(self, *args, **kwargs):
-        super(TestCase01GetPositiveReactedPostsAPITestCase, self).__init__(APP_NAME, OPERATION_NAME, REQUEST_METHOD,
-                                                                           URL_SUFFIX,
-                                                                           TEST_CASE, *args, **kwargs)
 
     def setupUser(self, username, password):
         pass
@@ -76,6 +67,4 @@ class TestCase01GetPositiveReactedPostsAPITestCase(CustomAPITestCase):
         self.react3_for_post3 = react_to_post(self.foo_user4, self.post2.id, "angry")
         self.react4_for_post3 = react_to_post(self.foo_user5, self.post2.id, "sad")
 
-
-        print(self.react1_for_post.id)
-        super(TestCase01GetPositiveReactedPostsAPITestCase, self).test_case()
+        self.default_test_case()
