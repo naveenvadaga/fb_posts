@@ -7,13 +7,13 @@ from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
 
 REQUEST_BODY = """
 {
-    "comment_content": "string"
+    "comment_content": "string1"
 }
 """
 
 TEST_CASE = {
     "request": {
-        "path_params": {"post_id": "1234"},
+        "path_params": {"post_id": "1234", "comment_id": "1234"},
         "query_params": {},
         "header_params": {},
         "securities": {"oauth": {"tokenUrl": "http://auth.ibtspl.com/oauth2/", "flow": "password", "scopes": ["write"],
@@ -24,7 +24,7 @@ TEST_CASE = {
 }
 
 
-class TestCase01PostCommentForPostAPITestCase(CustomAPITestCase):
+class TestCase02PostCommentForCommentAPITestCase(CustomAPITestCase):
     app_name = APP_NAME
     operation_name = OPERATION_NAME
     request_method = REQUEST_METHOD
@@ -35,17 +35,20 @@ class TestCase01PostCommentForPostAPITestCase(CustomAPITestCase):
         pass
 
     def test_case(self):
-        from fb_post.models_utility_functions import Comment, create_post, add_comment
+        from fb_post.models_utility_functions import Comment, create_post, add_comment, reply_to_comment
         self.foo_user = self._create_user("username", "password")
+        self.foo_user2 = self._create_user("username2", "password")
         self.post = create_post(self.foo_user.id, "content")
-
-        TEST_CASE['request']['path_params']['post_id'] = self.post.id
-        CustomAPITestCase.test_case_dict = TEST_CASE
+        self.comment = add_comment(self.post.id, self.foo_user.id, "comment")
+        self.reply = reply_to_comment(self.comment.id, self.foo_user2.id, "reply")
+        print(self.comment.id)
+        print("s")
+        TEST_CASE['request']['path_params']['comment_id'] = self.reply.id
         self.count_before_comment = Comment.objects.all().count()
         self.default_test_case()
 
     def _assert_snapshots(self, response):
-        super(TestCase01PostCommentForPostAPITestCase, self)._assert_snapshots(response)
+        super(TestCase02PostCommentForCommentAPITestCase, self)._assert_snapshots(response)
         from fb_post.models_utility_functions import Comment
         count_after_comment = Comment.objects.all().count()
         import json
@@ -54,10 +57,10 @@ class TestCase01PostCommentForPostAPITestCase(CustomAPITestCase):
         self.assert_match_snapshot(count_after_comment - self.count_before_comment, name='count')
         self.assert_match_snapshot(comment.comment_content, name='comment_content')
         self.assert_match_snapshot(comment.person.username, name='comment_person')
+        self.assert_match_snapshot(comment.reply.id , name='reply_name')
 
-    '''
-    def compareResponse(self, response, test_case_response_dict):
-        super(TestCase01PostCommentForPostAPITestCase, self).compareResponse(response, test_case_response_dict)
+    '''def compareRespons   e(self, response, test_case_response_dict):
+        super(TestCase01PostCommentForCommentAPITestCase, self).compareResponse(response, test_case_response_dict)
         from fb_post.models_utility_functions import Comment
         count_after_comment = Comment.objects.all().count()
         import json
@@ -65,4 +68,7 @@ class TestCase01PostCommentForPostAPITestCase(CustomAPITestCase):
         response_body = json.loads(response.content)
         print(type(response_body['id']))
         assert self.count_before_comment + 1 == count_after_comment
+        # comment = Comment.objects.get(comment_content='string1')
+        # assert comment.comment_content == "string"
+        # assert comment.person == self.foo_user
     '''

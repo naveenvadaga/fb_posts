@@ -11,5 +11,7 @@ def api_wrapper(*args, **kwargs):
     # print("fasf")
     from fb_post.models_utility_functions import react_to_post
     react = react_to_post(user, post_id, react_type)
+    if react == None:
+        return
 
     return {"id": react.id}

@@ -6,7 +6,9 @@ REQUEST_METHOD = "get"
 URL_SUFFIX = "post/{post_id}/metrics/"
 
 from .test_case_01 import TestCase01GetPostMetricsAPITestCase
+from .test_case_02 import TestCase02GetPostMetricsAPITestCase
 
 __all__ = [
-    "TestCase01GetPostMetricsAPITestCase"
+    "TestCase01GetPostMetricsAPITestCase",
+    "TestCase02GetPostMetricsAPITestCase"
 ]

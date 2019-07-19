@@ -6,7 +6,9 @@ REQUEST_METHOD = "get"
 URL_SUFFIX = "post/react/count/"
 
 from .test_case_01 import TestCase01GetReactionsCountForPostsAPITestCase
+from .test_case_02 import TestCase02GetReactionsCountForPostsAPITestCase
 
 __all__ = [
-    "TestCase01GetReactionsCountForPostsAPITestCase"
+    "TestCase01GetReactionsCountForPostsAPITestCase",
+    "TestCase02GetReactionsCountForPostsAPITestCase"
 ]

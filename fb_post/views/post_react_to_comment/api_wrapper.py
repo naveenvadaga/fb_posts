@@ -11,4 +11,6 @@ def api_wrapper(*args, **kwargs):
     # print(comment_id)
     from fb_post.models_utility_functions import react_to_comment
     react = react_to_comment(user, comment_id, react_type)
+    if react == None:
+        return
     return {"id": react.id}

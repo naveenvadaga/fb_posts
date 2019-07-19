@@ -8,7 +8,6 @@ def api_wrapper(*args, **kwargs):
     comment_id = kwargs['comment_id']
     offset = kwargs['request_query_params']['offset']
     limit = kwargs['request_query_params']['limit']
-
     from fb_post.models_utility_functions import get_replies_for_comment, SuspiciousOperation
     try:
         replies = get_replies_for_comment(comment_id, offset, limit)
@@ -17,4 +16,4 @@ def api_wrapper(*args, **kwargs):
         return replies
     except SuspiciousOperation:
         from django_swagger_utils.drf_server.exceptions import BadRequest
-        raise BadRequest('Invalid post id', 'INVALID_POST_ID')
+        raise BadRequest('Invalid comment id', 'INVALID_COMMENT_ID')
