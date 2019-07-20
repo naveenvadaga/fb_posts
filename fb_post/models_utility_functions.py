@@ -166,7 +166,7 @@ def reply_to_comment(comment_id, reply_user_id, reply_text):
     comment_with_commentId = Comment.objects.get(id=comment_id)
     person_with_id = Person.objects.get(id=reply_user_id)
 
-    if comment_with_commentId.reply == None:
+    if comment_with_commentId.reply is None:
         reply_created = Comment(person=person_with_id, comment_content=reply_text, reply=comment_with_commentId)
         print("on 1")
     else:

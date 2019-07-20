@@ -12,31 +12,31 @@ class ReactInteractor:
 
     def react_to_post(self, reacted_by_id: int, post_id: int, reaction_type: str) -> dict:
         try:
-            react_id = self.storage.react_to_post_exists(reacted_by_id, post_id)
-            if self.storage.get_reaction_type_for_reaction(react_id) == reaction_type:
-                return self.presenter.create_react_response(self.storage.delete_reaction(react_id))
+            react = self.storage.react_to_post_exists(reacted_by_id, post_id)
+            if react.react_type == reaction_type:
+                self.storage.delete_reaction(react.id)
+                response = None
             else:
-                self.storage.update_reaction_type(react_id, reaction_type)
-                return self.presenter.create_react_response(react_id)
+                self.storage.update_reaction_type(react.id, reaction_type)
+                response = self.presenter.create_react_response(react.id)
 
         except ObjectDoesNotExist:
             react_id = self.storage.react_to_post(reacted_by_id, post_id, reaction_type)
-
-        response = self.presenter.create_react_response(react_id)
+            response = self.presenter.create_react_response(react_id)
         return response
 
     def react_to_comment(self, reacted_by_id: int, comment_id: int, reaction_type: str) -> dict:
 
         try:
-            react_id = self.storage.react_to_comment_exits(reacted_by_id, comment_id)
-            if self.storage.get_reaction_type_for_reaction(react_id) == reaction_type:
-                return self.presenter.create_react_response(self.storage.delete_reaction(react_id))
+            react = self.storage.react_to_comment_exits(reacted_by_id, comment_id)
+            if react.react_type == reaction_type:
+                self.presenter.create_react_response(self.storage.delete_reaction(react.id))
+                response = None
             else:
-                self.storage.update_reaction_type(react_id, reaction_type)
-                return self.presenter.create_react_response(react_id)
+                self.storage.update_reaction_type(react.id, reaction_type)
+                response = self.presenter.create_react_response(react.id)
 
         except ObjectDoesNotExist:
             react_id = self.storage.react_to_comment(reacted_by_id, comment_id, reaction_type)
-
-        response = self.presenter.create_react_response(react_id)
+            response = self.presenter.create_react_response(react_id)
         return response
