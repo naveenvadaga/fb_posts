@@ -265,10 +265,7 @@ def get_posts_reacted_by_user(user_id):
 
 def get_reactions_to_post(post_id, offset, limit):
     reactions_to_posts = []
-    # reactions = Post.objects.filter(id=post_id).prefetch_related(
-    #     Prefetch('react_set', queryset=React.objects.select_related('person'), to_attr='reacts'))
     reactions = React.objects.filter(post_id=post_id).select_related('person')[offset:offset + limit]
-    # reactions = reactions[0].reacts
     for reaction in reactions:
         reactions_to_posts.append({
             "id": reaction.person_id,
