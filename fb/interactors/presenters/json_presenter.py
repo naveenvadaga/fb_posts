@@ -2,7 +2,7 @@ import abc
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional, List
-from ..storages.storage import ReactionsForPostDto, RepliesDto, GetPostDto
+from ..storages.storage import ReactionsForPostDto, RepliesDto, GetPostDto,PostMetricsDto
 
 
 @dataclass
@@ -50,7 +50,7 @@ class JsonPresenter:
         pass
 
     @abc.abstractmethod
-    def get_post_metrics_response(self, metrics: dict) -> dict:
+    def get_post_metrics_response(self, metrics: List[PostMetricsDto]) -> dict:
         pass
 
     @abc.abstractmethod

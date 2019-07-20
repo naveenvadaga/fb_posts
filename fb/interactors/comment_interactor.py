@@ -1,5 +1,6 @@
 from .presenters.json_presenter import JsonPresenter
 from .storages.storage import Storage
+from django.core.exceptions import SuspiciousOperation
 
 
 class CommentInteractor:
@@ -13,11 +14,22 @@ class CommentInteractor:
         return response
 
     def add_comment_to_comment(self, comment_id: int, commenter_id: int, comment_text: str) -> dict:
-        comment_reply_id = self.storage.comment_reply_id_field(comment_id)
-        if comment_reply_id is None:
+        parent_comment_id = self.storage.comment_reply_id_field(comment_id)
+        if parent_comment_id is None:
             comment_id = self.storage.add_comment_to_comment(comment_id, commenter_id, comment_text)
         else:
-            comment_id = self.storage.add_comment_to_comment(comment_reply_id, commenter_id, comment_text)
+            comment_id = self.storage.add_comment_to_comment(parent_comment_id, commenter_id, comment_text)
 
         response = self.presenter.create_comment_response(comment_id)
+        return response
+
+    def get_comment_replies(self, comment_id: int, offset: int, limit: int):
+
+        try:
+            self.storage.get_comment_with_comment_id_and_reply(comment_id)
+            replies = self.storage.get_comment_replies(comment_id, offset, limit)
+            response = self.presenter.get_replies_for_comment_response(replies)
+        except SuspiciousOperation:
+            from django_swagger_utils.drf_server.exceptions import BadRequest
+            raise BadRequest('Invalid comment id', 'INVALID_COMMENT_ID')
         return response

@@ -26,7 +26,6 @@ class ReactInteractor:
         return response
 
     def react_to_comment(self, reacted_by_id: int, comment_id: int, reaction_type: str) -> dict:
-
         try:
             react = self.storage.react_to_comment_exits(reacted_by_id, comment_id)
             if react.react_type == reaction_type:

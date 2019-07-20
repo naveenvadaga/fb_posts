@@ -34,8 +34,14 @@ class ReactionsForPostDto(PersonDto):
 
 
 @dataclass
+class PostMetricsDto:
+    type: str
+    count: int
+
+
+@dataclass
 class ReactionType:
-    type: List
+    type: List[strss]
     count: int
 
 
@@ -128,7 +134,7 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def get_post_metrics(self, post_id: int) -> dict:
+    def get_post_metrics(self, post_id: int) -> List[PostMetricsDto]:
         pass
 
     @abc.abstractmethod
