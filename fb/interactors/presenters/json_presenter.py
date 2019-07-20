@@ -2,7 +2,7 @@ import abc
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional, List
-from ..storages.storage import ReactionsForPostDto
+from ..storages.storage import ReactionsForPostDto, RepliesDto, GetPostDto
 
 
 @dataclass
@@ -55,4 +55,28 @@ class JsonPresenter:
 
     @abc.abstractmethod
     def get_positive_reacted_posts_response(self, list_positive_posts: List[int]) -> dict:
+        pass
+
+    @abc.abstractmethod
+    def get_replies_for_comment_response(self, replies: List[RepliesDto]) -> dict:
+        pass
+
+    @abc.abstractmethod
+    def bad_request_invalid_comment_id(self) -> dict:
+        pass
+
+    @abc.abstractmethod
+    def get_post_details_response(self, get_post_dto: GetPostDto) -> dict:
+        pass
+
+    @abc.abstractmethod
+    def bad_request_invalid_post_id(self) -> dict:
+        pass
+
+    @abc.abstractmethod
+    def delete_post_response(self) -> dict:
+        pass
+
+    @abc.abstractmethod
+    def get_posts_posted_by_person_response(self, list_of_posts: List[GetPostDto]) -> dict:
         pass

@@ -14,7 +14,7 @@ class PersonDto:
 @dataclass
 class PostDto:
     id: int
-    posted_person: int
+    posted_person: PersonDto
     post_content: str
     posted_at: datetime
 
@@ -31,6 +31,41 @@ class ReactDto:
 @dataclass
 class ReactionsForPostDto(PersonDto):
     reaction_type: str
+
+
+@dataclass
+class ReactionType:
+    type: List
+    count: int
+
+
+@dataclass
+class RepliesDto:
+    comment_id: int
+    commenter: PersonDto
+    commented_at: datetime
+    comment_content: str
+
+
+@dataclass
+class CommentDto:
+    id: int
+    comment_at: datetime
+    comment_content: str
+    commenter: PersonDto
+    reactions: ReactionType
+
+
+@dataclass
+class CommentForPostDetailsDto(CommentDto):
+    replies_count: int
+    replies = List[CommentDto]
+
+
+@dataclass
+class GetPostDto(PostDto, ReactionType):
+    comments: List[CommentForPostDetailsDto]
+    comments_count: int
 
 
 class Storage:
@@ -98,4 +133,24 @@ class Storage:
 
     @abc.abstractmethod
     def get_positive_reacted_posts(self) -> List[int]:
+        pass
+
+    @abc.abstractmethod
+    def get_comment_with_comment_id_and_reply(self, comment_id: int) -> None:
+        pass
+
+    @abc.abstractmethod
+    def get_comment_replies(self, comment_id: int, offset: int, limit: int) -> List[RepliesDto]:
+        pass
+
+    @abc.abstractmethod
+    def get_post_details(self, post_id: int) -> GetPostDto:
+        pass
+
+    @abc.abstractmethod
+    def delete_post(self, post_id: int) -> None:
+        pass
+
+    @abc.abstractmethod
+    def get_posts_posted_by_person(self, person_id: int) -> List[GetPostDto]:
         pass

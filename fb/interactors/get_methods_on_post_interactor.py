@@ -27,3 +27,13 @@ class GetMethodsOnPostInteractor:
         positive_reacted_post = self.storage.get_positive_reacted_posts()
         response = self.presenter.get_positive_reacted_posts_response(positive_reacted_post)
         return response
+
+    def get_post_details(self, post_id: int) -> dict:
+        get_post_dto = self.storage.get_post_details(post_id)
+        response = self.presenter.get_post_details_response(get_post_dto)
+        return response
+
+    def get_posts_posted_by_person(self, person_id: int) -> dict:
+        post_dto_list = self.storage.get_posts_posted_by_person(person_id)
+        response = self.presenter.get_posts_posted_by_person_response(post_dto_list)
+        return response
