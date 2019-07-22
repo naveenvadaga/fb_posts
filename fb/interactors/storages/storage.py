@@ -41,7 +41,7 @@ class PostMetricsDto:
 
 @dataclass
 class ReactionType:
-    type: List[strss]
+    type: List[str]
     count: int
 
 

@@ -10,7 +10,7 @@ class PostInteractor:
         self.presenter = presenter
         self.storage = storage
 
-    def post_interactor(self, created_by_id: int, post_content: str) -> Dict[str, int]:
+    def create_post_interactor(self, created_by_id: int, post_content: str) -> Dict[str, int]:
         post = self.storage.create_post(created_by_id, post_content)
         response = self.presenter.create_post_response(post)
         return response
@@ -20,8 +20,7 @@ class PostInteractor:
             self.storage.delete_post(post_id)
             response = self.presenter.delete_post_response()
         except ObjectDoesNotExist:
-            from django_swagger_utils.drf_server.exceptions import BadRequest
-            raise BadRequest('Invalid post id', 'INVALID_POST_ID')
+            self.presenter.bad_request_invalid_post_id()
         return response
 
     def get_reactions_counts_for_posts_interactor(self) -> dict:
