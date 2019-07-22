@@ -18,9 +18,10 @@ class PostInteractor:
     def delete_post_interactor(self, post_id: int) -> dict:
         try:
             self.storage.delete_post(post_id)
-            response = self.presenter.delete_post_response()
+
         except ObjectDoesNotExist:
             self.presenter.bad_request_invalid_post_id()
+        response = self.presenter.delete_post_response()
         return response
 
     def get_reactions_counts_for_posts_interactor(self) -> dict:

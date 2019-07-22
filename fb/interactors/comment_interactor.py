@@ -27,9 +27,9 @@ class CommentInteractor:
 
         try:
             self.storage.get_comment_with_comment_id_and_reply(comment_id)
-            replies = self.storage.get_comment_replies(comment_id, offset, limit)
-            response = self.presenter.get_replies_for_comment_response(replies)
+
         except SuspiciousOperation:
-            from django_swagger_utils.drf_server.exceptions import BadRequest
-            raise BadRequest('Invalid comment id', 'INVALID_COMMENT_ID')
+            self.presenter.bad_request_invalid_comment_id()
+        replies = self.storage.get_comment_replies(comment_id, offset, limit)
+        response = self.presenter.get_replies_for_comment_response(replies)
         return response

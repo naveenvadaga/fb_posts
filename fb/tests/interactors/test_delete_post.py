@@ -36,4 +36,4 @@ class DeletePostTest(unittest.TestCase):
             post_interactor.delete_post_interactor(1)
 
         mock_storage.delete_post.assert_called_once_with(1)
-        mock_json_presenter.bad_request_invalid_post_id.assert_called_once_with()
+        mock_json_presenter.bad_request_invalid_post_id.assert_called_once()
