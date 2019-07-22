@@ -22,7 +22,7 @@ class DeletePostTest(unittest.TestCase):
         response_from_delete_post_method = post_interactor.delete_post_interactor(1)
 
         mock_storage.delete_post.assert_called_once_with(1)
-        mock_json_presenter.delete_post_response.assert_called_once_with()
+        mock_json_presenter.delete_post_response.assert_called_once()
         assert response_from_delete_post_method == response_send
 
     def test_delete_post_returns_bad_requests(self):
