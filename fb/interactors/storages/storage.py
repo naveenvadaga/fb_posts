@@ -101,9 +101,9 @@ class Storage:
     def react_to_comment_exists(self, reacted_person_id: int, comment_id: int) -> ReactDto:
         pass
 
-    @abc.abstractmethod
-    def get_reaction_type_for_reaction(self, reaction_id: int) -> str:
-        pass
+    # @abc.abstractmethod
+    # def get_reaction_type_for_reaction(self, reaction_id: int) -> str:
+    #     pass
 
     @abc.abstractmethod
     def update_reaction_type(self, reaction_id: int, reaction_type: str) -> int:
@@ -114,11 +114,11 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def react_to_post(self, reacted_by_id: int, post_id: int, reaction_type: str) -> Optional[int]:
+    def react_to_post(self, reacted_by_id: int, post_id: int, reaction_type: str) -> int:
         pass
 
     @abc.abstractmethod
-    def react_to_comment(self, reacted_by_id: int, comment_id: int, reaction_type: str) -> Optional[int]:
+    def react_to_comment(self, reacted_by_id: int, comment_id: int, reaction_type: str) -> int:
         pass
 
     @abc.abstractmethod

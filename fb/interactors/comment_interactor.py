@@ -24,7 +24,6 @@ class CommentInteractor:
         return response
 
     def get_comment_replies(self, comment_id: int, offset: int, limit: int):
-
         try:
             self.storage.get_comment_with_comment_id_and_reply(comment_id)
 

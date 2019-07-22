@@ -3,6 +3,7 @@ import os
 
 from fb_post_learning.settings.base import *
 
+
 # swagger utils #
 
 PRINT_REQUEST_RESPONSE_TO_CONSOLE = False
@@ -20,7 +21,8 @@ from django_swagger_utils.drf_server.utils.general.import_app_settings import im
 
 THIRD_PARTY_APPS = []
 APPS = [
-    "fb_post",
+    "fb_post"
+
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS
