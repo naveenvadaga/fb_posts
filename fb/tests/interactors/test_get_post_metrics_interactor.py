@@ -4,6 +4,7 @@ from unittest.mock import Mock
 from fb.interactors.storages.storage import Storage, PostMetricsDto
 from fb.interactors.presenters.json_presenter import JsonPresenter
 from fb.interactors.post_interactor import PostInteractor
+from dataclasses import fields
 
 
 class TestGetPostMetrics(unittest.TestCase):
@@ -12,9 +13,9 @@ class TestGetPostMetrics(unittest.TestCase):
         mock_storage = Mock(spec=Storage)
         mock_json_presenter = Mock(spec=JsonPresenter)
         post_id = 1
-        post_metrics_haha_dto = PostMetricsDto('haha', 2)
-        post_metrics_wow_dto = PostMetricsDto('wow', 1)
-        post_metrics_sad_dto = PostMetricsDto('sad', 1)
+        post_metrics_haha_dto = Mock(spec=[field.name for field in fields(PostMetricsDto)])
+        post_metrics_wow_dto = Mock(sspec=[field.name for field in fields(PostMetricsDto)])
+        post_metrics_sad_dto = Mock(spec=[field.name for field in fields(PostMetricsDto)])
         post_metrics = [post_metrics_haha_dto, post_metrics_sad_dto, post_metrics_wow_dto]
         response = {'reactions': post_metrics}
 
