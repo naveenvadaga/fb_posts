@@ -98,7 +98,7 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def react_to_comment_exits(self, reacted_person_id: int, comment_id: int) -> ReactDto:
+    def react_to_comment_exists(self, reacted_person_id: int, comment_id: int) -> ReactDto:
         pass
 
     @abc.abstractmethod
