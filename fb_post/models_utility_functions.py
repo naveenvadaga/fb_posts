@@ -256,7 +256,7 @@ def get_posts_with_more_positive_reactions():
 def get_posts_reacted_by_user(user_id):
     posts_reacted_by_users = []
 
-    posts_reacted_by_user = React.objects.filter(person=user_id).values('id')
+    posts_reacted_by_user = React.objects.filter(person_id=user_id, comment_id__isnull=True).values('post_id')
     for posts in posts_reacted_by_user:
         posts_reacted_by_users.append(posts['id'])
 

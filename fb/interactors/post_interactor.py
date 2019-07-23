@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from .presenters.json_presenter import JsonPresenter
 from .storages.storage import Storage
-from typing import Dict
+from typing import Dict, List
 
 
 class PostInteractor:
@@ -49,8 +49,8 @@ class PostInteractor:
         response = self.presenter.get_post_details_response(get_post_dto)
         return response
 
-    def get_posts_posted_by_person(self, person_id: int) -> dict:
-        post_dto_list = self.storage.get_posts_posted_by_person(person_id)
+    def get_posts_posted_by_person(self, person_id: int, offset: int, limit: int) -> List[dict]:
+        post_dto_list = self.storage.get_posts_posted_by_person(person_id, offset, limit)
         response = self.presenter.get_posts_posted_by_person_response(post_dto_list)
         return response
 

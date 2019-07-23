@@ -56,20 +56,23 @@ class RepliesDto:
 @dataclass
 class CommentDto:
     id: int
+    commenter: PersonDto
     comment_at: datetime
     comment_content: str
-    commenter: PersonDto
     reactions: ReactionType
 
 
 @dataclass
-class CommentForPostDetailsDto(CommentDto):
+class CommentForPostDetailsDto:
+    comment: CommentDto
     replies_count: int
-    replies = List[CommentDto]
+    replies: List[CommentDto]
 
 
 @dataclass
-class GetPostDto(PostDto, ReactionType):
+class GetPostDto:
+    post: PostDto
+    reactions_types: ReactionType
     comments: List[CommentForPostDetailsDto]
     comments_count: int
 
@@ -90,15 +93,15 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def comment_reply_id_field(self, comment_id) -> Optional[int]:
+    def parent_comment_id(self, comment_id) -> Optional[int]:
         pass
 
     @abc.abstractmethod
-    def react_to_post_exists(self, reacted_person_id: int, post_id: int) -> ReactDto:
+    def react_to_post_exists_or_not(self, reacted_person_id: int, post_id: int) -> ReactDto:
         pass
 
     @abc.abstractmethod
-    def react_to_comment_exists(self, reacted_person_id: int, comment_id: int) -> ReactDto:
+    def react_to_comment_exists_or_not(self, reacted_person_id: int, comment_id: int) -> ReactDto:
         pass
 
     # @abc.abstractmethod
@@ -142,7 +145,7 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def get_comment_with_comment_id_and_reply(self, comment_id: int) -> None:
+    def check_whether_given_id_is_comment_or_not(self, comment_id: int) -> None:
         pass
 
     @abc.abstractmethod
@@ -158,5 +161,5 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def get_posts_posted_by_person(self, person_id: int) -> List[GetPostDto]:
+    def get_posts_posted_by_person(self, person_id: int, offset: int, limit: int) -> List[GetPostDto]:
         pass

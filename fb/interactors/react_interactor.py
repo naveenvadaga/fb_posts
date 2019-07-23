@@ -12,7 +12,7 @@ class ReactInteractor:
 
     def react_to_post(self, reacted_by_id: int, post_id: int, reaction_type: str) -> dict:
         try:
-            react = self.storage.react_to_post_exists(reacted_by_id, post_id)
+            react = self.storage.react_to_post_exists_or_not(reacted_by_id, post_id)
             if react.react_type == reaction_type:
                 self.storage.delete_reaction(react.id)
                 response = self.presenter.create_react_response(None)
@@ -27,7 +27,7 @@ class ReactInteractor:
 
     def react_to_comment(self, reacted_by_id: int, comment_id: int, reaction_type: str) -> dict:
         try:
-            react = self.storage.react_to_comment_exists(reacted_by_id, comment_id)
+            react = self.storage.react_to_comment_exists_or_not(reacted_by_id, comment_id)
             if react.react_type == reaction_type:
                 self.storage.delete_reaction(react.id)
                 response = self.presenter.create_react_response(None)

@@ -14,7 +14,7 @@ class CommentInteractor:
         return response
 
     def add_comment_to_comment(self, comment_id: int, commenter_id: int, comment_text: str) -> dict:
-        parent_comment_id = self.storage.comment_reply_id_field(comment_id)
+        parent_comment_id = self.storage.parent_comment_id(comment_id)
         if parent_comment_id is None:
             comment_id = self.storage.add_comment_to_comment(comment_id, commenter_id, comment_text)
         else:
@@ -25,7 +25,7 @@ class CommentInteractor:
 
     def get_comment_replies(self, comment_id: int, offset: int, limit: int):
         try:
-            self.storage.get_comment_with_comment_id_and_reply(comment_id)
+            self.storage.check_whether_given_id_is_comment_or_not(comment_id)
 
         except SuspiciousOperation:
             self.presenter.bad_request_invalid_comment_id()

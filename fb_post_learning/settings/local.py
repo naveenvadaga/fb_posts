@@ -105,4 +105,4 @@ LOGGING['handlers'] = {
     }
 }
 
-AUTH_USER_MODEL = 'fb.Person'
+AUTH_USER_MODEL = 'fb_post.Person'
