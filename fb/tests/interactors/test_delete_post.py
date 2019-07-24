@@ -15,15 +15,16 @@ class DeletePostTest(unittest.TestCase):
         mock_storage = Mock(spec=Storage)
         mock_json_presenter = Mock(spec=JsonPresenter)
 
-        response_send = {'status': 'successfully deleted'}
+        mock_response_send = {'status': 'successfully deleted'}
         mock_storage.delete_post.return_value = None
-        mock_json_presenter.delete_post_response.return_value = response_send
+        mock_json_presenter.delete_post_response.return_value = mock_response_send
         post_interactor = PostInteractor(mock_json_presenter, mock_storage)
-        response_from_delete_post_method = post_interactor.delete_post_interactor(1)
+        response_from_delete_post_method = post_interactor.delete_post_interactor(
+            1)
 
         mock_storage.delete_post.assert_called_once_with(1)
         mock_json_presenter.delete_post_response.assert_called_once()
-        assert response_from_delete_post_method == response_send
+        assert response_from_delete_post_method == mock_response_send
 
     def test_delete_post_returns_bad_requests(self):
         mock_storage = Mock(spec=Storage)

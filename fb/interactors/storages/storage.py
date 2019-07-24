@@ -85,11 +85,13 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def add_comment_to_post(self, post_id: int, commenter_id: int, comment_text: str) -> int:
+    def add_comment_to_post(self, post_id: int, commenter_id: int,
+                            comment_text: str) -> int:
         pass
 
     @abc.abstractmethod
-    def add_comment_to_comment(self, comment_id: int, commenter_id: int, comment_text: str) -> int:
+    def add_comment_to_comment(self, comment_id: int, commenter_id: int,
+                               comment_text: str) -> int:
         pass
 
     @abc.abstractmethod
@@ -97,16 +99,14 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def react_to_post_exists_or_not(self, reacted_person_id: int, post_id: int) -> ReactDto:
+    def react_to_post_exists_or_not(self, reacted_person_id: int,
+                                    post_id: int) -> ReactDto:
         pass
 
     @abc.abstractmethod
-    def react_to_comment_exists_or_not(self, reacted_person_id: int, comment_id: int) -> ReactDto:
+    def react_to_comment_exists_or_not(self, reacted_person_id: int,
+                                       comment_id: int) -> ReactDto:
         pass
-
-    # @abc.abstractmethod
-    # def get_reaction_type_for_reaction(self, reaction_id: int) -> str:
-    #     pass
 
     @abc.abstractmethod
     def update_reaction_type(self, reaction_id: int, reaction_type: str) -> int:
@@ -121,11 +121,13 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def react_to_comment(self, reacted_by_id: int, comment_id: int, reaction_type: str) -> int:
+    def react_to_comment(self, reacted_by_id: int, comment_id: int,
+                         reaction_type: str) -> int:
         pass
 
     @abc.abstractmethod
-    def get_reactions_to_post(self, post_id: int, offset: int, limit: int) -> List[ReactionsForPostDto]:
+    def get_reactions_to_post(self, post_id: int, offset: int, limit: int) -> List[
+        ReactionsForPostDto]:
         pass
 
     @abc.abstractmethod
@@ -133,11 +135,11 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def get_post_reacted_by_user(self, user_id: int) -> List[int]:
+    def get_posts_reacted_by_user(self, user_id: int) -> List[int]:
         pass
 
     @abc.abstractmethod
-    def get_post_metrics(self, post_id: int) -> List[PostMetricsDto]:
+    def get_post_reactions_metrics(self, post_id: int) -> List[PostMetricsDto]:
         pass
 
     @abc.abstractmethod
@@ -149,7 +151,8 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def get_comment_replies(self, comment_id: int, offset: int, limit: int) -> List[RepliesDto]:
+    def get_comment_replies(self, comment_id: int, offset: int, limit: int) -> List[
+        RepliesDto]:
         pass
 
     @abc.abstractmethod
@@ -161,5 +164,6 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def get_posts_posted_by_person(self, person_id: int, offset: int, limit: int) -> List[GetPostDto]:
+    def get_posts_posted_by_person(self, person_id: int, offset: int, limit: int) -> List[
+        GetPostDto]:
         pass

@@ -18,14 +18,13 @@ class GetReactionsForPost(unittest.TestCase):
         post_id = 1
         offset = 0
         limit = 2
-        response = [{'react_type': "haha"}, {'react_type': 'wow'}]
-
+        mock_response = [{'react_type': "haha"}, {'react_type': 'wow'}]
         mock_storage.get_reactions_to_post.return_value = mock_reaction_list
-        mock_json_presenter.create_reactions_for_post_response.return_value = response
-
+        mock_json_presenter.create_reactions_for_post_response.return_value = mock_response
         post_interactor = PostInteractor(mock_json_presenter, mock_storage)
-        response_from_get_reactions_count_post = post_interactor.get_reactions_for_post(post_id, offset, limit)
-
+        response_from_get_reactions_count_post = post_interactor.get_reactions_for_post(
+            post_id, offset, limit)
         mock_storage.get_reactions_to_post.assert_called_once_with(post_id, offset, limit)
-        mock_json_presenter.create_reactions_for_post_response.assert_called_once_with(mock_reaction_list)
-        assert response_from_get_reactions_count_post == response
+        mock_json_presenter.create_reactions_for_post_response.assert_called_once_with(
+            mock_reaction_list)
+        assert response_from_get_reactions_count_post == mock_response
