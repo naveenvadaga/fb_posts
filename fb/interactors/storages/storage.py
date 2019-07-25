@@ -14,23 +14,23 @@ class PersonDto:
 @dataclass
 class PostDto:
     id: int
-    posted_person: PersonDto
+    posted_person_id: int
     post_content: str
     posted_at: datetime
 
 
 @dataclass
-class ReactDto:
-    id: int
+class ReactionDto:
     react_type: str
-    reacted_person: int
-    post: Optional[int]
-    comment: Optional[int]
+    id: int = 0
+    reacted_person_id: int = 0
+    post: int = 0
+    comment: int = 0
 
 
 @dataclass
-class ReactionsForPostDto(PersonDto):
-    reaction_type: str
+class PersonWithReactionDto(PersonDto):
+    reaction: ReactionDto
 
 
 @dataclass
@@ -38,43 +38,28 @@ class PostMetricsDto:
     type: str
     count: int
 
-
-@dataclass
-class ReactionType:
-    type: List[str]
-    count: int
-
-
-@dataclass
-class RepliesDto:
-    comment_id: int
-    commenter: PersonDto
-    commented_at: datetime
-    comment_content: str
-
-
 @dataclass
 class CommentDto:
-    id: int
-    commenter: PersonDto
-    comment_at: datetime
+    comment_id: int
+    commenter_id: int
+    commented_at: datetime
     comment_content: str
-    reactions: ReactionType
+    post: int = 0
+    reply: int = 0
 
 
 @dataclass
-class CommentForPostDetailsDto:
+class CommentWithPersonDto:
     comment: CommentDto
-    replies_count: int
-    replies: List[CommentDto]
+    person: PersonDto
 
 
 @dataclass
-class GetPostDto:
+class UserPostDto:
     post: PostDto
-    reactions_types: ReactionType
-    comments: List[CommentForPostDetailsDto]
-    comments_count: int
+    persons: List[PersonDto]
+    reactions: List[ReactionDto]
+    comments: List[CommentDto]
 
 
 class Storage:
@@ -90,8 +75,8 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def add_comment_to_comment(self, comment_id: int, commenter_id: int,
-                               comment_text: str) -> int:
+    def add_reply_to_comment(self, comment_id: int, commenter_id: int,
+                             comment_text: str) -> int:
         pass
 
     @abc.abstractmethod
@@ -99,17 +84,17 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def react_to_post_exists_or_not(self, reacted_person_id: int,
-                                    post_id: int) -> ReactDto:
+    def post_reaction_exists_or_not(self, reacted_person_id: int,
+                                    post_id: int) -> ReactionDto:
         pass
 
     @abc.abstractmethod
-    def react_to_comment_exists_or_not(self, reacted_person_id: int,
-                                       comment_id: int) -> ReactDto:
+    def comment_reaction_exists_or_not(self, reacted_person_id: int,
+                                       comment_id: int) -> ReactionDto:
         pass
 
     @abc.abstractmethod
-    def update_reaction_type(self, reaction_id: int, reaction_type: str) -> int:
+    def update_reaction(self, reaction_id: int, reaction_type: str) -> int:
         pass
 
     @abc.abstractmethod
@@ -126,16 +111,16 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def get_reactions_to_post(self, post_id: int, offset: int, limit: int) -> List[
-        ReactionsForPostDto]:
+    def get_post_reactions(self, post_id: int, offset: int, limit: int) -> List[
+        PersonWithReactionDto]:
         pass
 
     @abc.abstractmethod
-    def get_reactions_count_to_posts(self) -> int:
+    def get_posts_reactions_count(self) -> int:
         pass
 
     @abc.abstractmethod
-    def get_posts_reacted_by_user(self, user_id: int) -> List[int]:
+    def get_user_reacted_posts(self, user_id: int) -> List[int]:
         pass
 
     @abc.abstractmethod
@@ -152,11 +137,11 @@ class Storage:
 
     @abc.abstractmethod
     def get_comment_replies(self, comment_id: int, offset: int, limit: int) -> List[
-        RepliesDto]:
+        CommentWithPersonDto]:
         pass
 
     @abc.abstractmethod
-    def get_post_details(self, post_id: int) -> GetPostDto:
+    def get_post_details(self, post_id: int) -> UserPostDto:
         pass
 
     @abc.abstractmethod
@@ -164,6 +149,6 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def get_posts_posted_by_person(self, person_id: int, offset: int, limit: int) -> List[
-        GetPostDto]:
+    def get_user_posts(self, person_id: int, offset: int, limit: int) -> List[
+        UserPostDto]:
         pass

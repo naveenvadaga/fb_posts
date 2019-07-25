@@ -30,8 +30,8 @@ class TestCase01PostReactToPostAPITestCase(CustomAPITestCase):
         pass
 
     def test_case(self):
-        from fb_post.models_utility_functions import React
-        self.count_before_reaction = React.objects.all().count()
+        from fb_post.models_utility_functions import Reaction
+        self.count_before_reaction = Reaction.objects.all().count()
         super(TestCase01PostReactToPostAPITestCase, self).setupUser('username', 'password')
         from fb_post.models_utility_functions import create_post
         self.post = create_post(self.foo_user.id, "content")
@@ -40,11 +40,11 @@ class TestCase01PostReactToPostAPITestCase(CustomAPITestCase):
 
     def _assert_snapshots(self, response):
         super(TestCase01PostReactToPostAPITestCase, self)._assert_snapshots(response)
-        from fb_post.models_utility_functions import React
-        count_after_reaction = React.objects.all().count()
+        from fb_post.models_utility_functions import Reaction
+        count_after_reaction = Reaction.objects.all().count()
         import json
         response_body = json.loads(response.content)
-        react = React.objects.get(id=response_body['id'])
+        react = Reaction.objects.get(id=response_body['id'])
         self.assert_match_snapshot(react.react_type, name='reaction_type')
         self.assert_match_snapshot(react.person.username, name='person_username')
         self.assert_match_snapshot(count_after_reaction - self.count_before_reaction, name='count')

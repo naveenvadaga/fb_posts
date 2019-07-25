@@ -9,7 +9,7 @@ from dataclasses import fields
 
 class TestGetPostMetrics(unittest.TestCase):
 
-    def test_get_post_metrics_interactor_returns_reactions_metrics(self):
+    def test_get_post_metrics_returns_reactions_metrics(self):
         mock_storage = Mock(spec=Storage)
         mock_json_presenter = Mock(spec=JsonPresenter)
         post_id = 1

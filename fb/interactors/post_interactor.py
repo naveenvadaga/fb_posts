@@ -21,18 +21,18 @@ class PostInteractor:
             self.storage.delete_post(post_id)
 
         except ObjectDoesNotExist:
-            self.presenter.bad_request_invalid_post_id()
+            self.presenter.raise_invalid_post_id()
         response = self.presenter.delete_post_response()
         return response
 
-    def get_reactions_counts_for_posts_interactor(self) -> dict:
-        count = self.storage.get_reactions_count_to_posts()
-        response = self.presenter.get_reactions_count_for_posts_response(count)
+    def get_posts_reactions_count_interactor(self) -> dict:
+        count = self.storage.get_posts_reactions_count()
+        response = self.presenter.get_posts_reactions_count_response(count)
         return response
 
-    def get_post_reacted_by_user_interactor(self, user_id: int) -> dict:
-        post_ids_list = self.storage.get_posts_reacted_by_user(user_id)
-        response = self.presenter.get_post_reacted_by_user_response(
+    def get_user_reacted_posts_interactor(self, user_id: int) -> dict:
+        post_ids_list = self.storage.get_user_reacted_posts(user_id)
+        response = self.presenter.get_user_reacted_posts_response(
             post_ids_list)
         return response
 
@@ -48,23 +48,23 @@ class PostInteractor:
             positive_reacted_post_list)
         return response
 
-    def get_post_details(self, post_id: int) -> dict:
+    def get_post_details_interactor(self, post_id: int) -> dict:
         get_post_dto = self.storage.get_post_details(post_id)
         response = self.presenter.get_post_details_response(get_post_dto)
         return response
 
-    def get_posts_posted_by_person(self, person_id: int, offset: int,
-                                   limit: int) -> List[dict]:
-        post_dto_list = self.storage.get_posts_posted_by_person(person_id,
-                                                                offset, limit)
-        response = self.presenter.get_posts_posted_by_person_response(
+    def get_user_posts_interactor(self, person_id: int, offset: int,
+                                  limit: int) -> List[dict]:
+        post_dto_list = self.storage.get_user_posts(person_id,
+                                                    offset, limit)
+        response = self.presenter.get_user_posts_response(
             post_dto_list)
         return response
 
-    def get_reactions_for_post(self, post_id: int, offset: int,
-                               limit: int) -> dict:
-        reactions_dto_list = self.storage.get_reactions_to_post(post_id, offset,
-                                                                limit)
-        response = self.presenter.create_reactions_for_post_response(
+    def get_post_reactions_interactor(self, post_id: int, offset: int,
+                                      limit: int) -> dict:
+        reactions_dto_list = self.storage.get_post_reactions(post_id, offset,
+                                                             limit)
+        response = self.presenter.create_post_reactions_response(
             reactions_dto_list)
         return response

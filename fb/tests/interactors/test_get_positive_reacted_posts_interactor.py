@@ -8,7 +8,7 @@ from fb.interactors.post_interactor import PostInteractor
 
 class TestGetPositiveReactedPosts(unittest.TestCase):
 
-    def test_get_positive_reacted_posts_interactor_returns_post_ids_list(self):
+    def test_get_positive_reacted_posts_returns_post_ids_list(self):
         mock_storage = Mock(spec=Storage)
         mock_json_presenter = Mock(spec=JsonPresenter)
         posts_id = [1, 2, 3, 4]

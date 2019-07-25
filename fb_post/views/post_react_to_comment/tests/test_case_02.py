@@ -42,14 +42,14 @@ class TestCase02PostReactToCommentAPITestCase(CustomAPITestCase):
         self.react = react_to_comment(self.foo_user, self.comment.id, "haha")
         TEST_CASE['request']['path_params']['comment_id'] = self.comment.id
 
-        from fb_post.models_utility_functions import React
-        self.count_before_reaction = React.objects.all().count()
+        from fb_post.models_utility_functions import Reaction
+        self.count_before_reaction = Reaction.objects.all().count()
         self.default_test_case()
 
     def _assert_snapshots(self, response):
         super(TestCase02PostReactToCommentAPITestCase, self)._assert_snapshots(response)
-        from fb_post.models_utility_functions import React
-        count_after_reaction = React.objects.all().count()
+        from fb_post.models_utility_functions import Reaction
+        count_after_reaction = Reaction.objects.all().count()
         self.assert_match_snapshot(count_after_reaction - self.count_before_reaction, name='count')
 
     '''

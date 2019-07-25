@@ -1,25 +1,7 @@
 import abc
-from dataclasses import dataclass
-from datetime import datetime
 from typing import Optional, List
-from ..storages.storage import ReactionsForPostDto, RepliesDto, GetPostDto, PostMetricsDto
-
-
-@dataclass
-class PostDto:
-    id: int
-    posted_person: int
-    post_content: str
-    posted_at: datetime
-
-
-@dataclass
-class ReactDto:
-    id: int
-    react_type: str
-    reacted_person: int
-    post: Optional[int]
-    comment: Optional[int]
+from ..storages.storage import PersonWithReactionDto, CommentDto, UserPostDto, \
+    PostMetricsDto
 
 
 class JsonPresenter:
@@ -30,7 +12,7 @@ class JsonPresenter:
         pass
 
     @abc.abstractmethod
-    def create_react_response(self, reaction_id: Optional[int]) -> dict:
+    def create_reaction_response(self, reaction_id: Optional[int]) -> dict:
         pass
 
     @abc.abstractmethod
@@ -38,15 +20,16 @@ class JsonPresenter:
         pass
 
     @abc.abstractmethod
-    def create_reactions_for_post_response(self, reactions_list: List[ReactionsForPostDto]) -> dict:
+    def create_post_reactions_response(self, reactions_list: List[
+        PersonWithReactionDto]) -> dict:
         pass
 
     @abc.abstractmethod
-    def get_reactions_count_for_posts_response(self, count: int) -> dict:
+    def get_posts_reactions_count_response(self, count: int) -> dict:
         pass
 
     @abc.abstractmethod
-    def get_post_reacted_by_user_response(self, list_of_posts_id: List[int]) -> dict:
+    def get_user_reacted_posts_response(self, list_of_posts_id: List[int]) -> dict:
         pass
 
     @abc.abstractmethod
@@ -58,19 +41,19 @@ class JsonPresenter:
         pass
 
     @abc.abstractmethod
-    def get_replies_for_comment_response(self, replies: List[RepliesDto]) -> dict:
+    def get_comment_replies_response(self, replies: List[CommentDto]) -> dict:
         pass
 
     @abc.abstractmethod
-    def bad_request_invalid_comment_id(self) -> dict:
+    def raise_invalid_comment_id(self) -> None:
         pass
 
     @abc.abstractmethod
-    def get_post_details_response(self, get_post_dto: GetPostDto) -> dict:
+    def get_post_details_response(self, get_post_dto: UserPostDto) -> dict:
         pass
 
     @abc.abstractmethod
-    def bad_request_invalid_post_id(self) -> dict:
+    def raise_invalid_post_id(self) -> None:
         pass
 
     @abc.abstractmethod
@@ -78,5 +61,6 @@ class JsonPresenter:
         pass
 
     @abc.abstractmethod
-    def get_posts_posted_by_person_response(self, list_of_posts: List[GetPostDto]) -> List[dict]:
+    def get_user_posts_response(self, list_of_posts: List[UserPostDto]) -> \
+            List[dict]:
         pass

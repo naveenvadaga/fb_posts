@@ -5,7 +5,7 @@ import pytest
 
 
 @pytest.mark.django_db
-class TestPostDetails:
+class TestUserPostsDetails:
 
     @pytest.fixture()
     def post_setup(self, person_fixture, persons_fixture):
@@ -67,20 +67,22 @@ class TestPostDetails:
                              self.reply1_for_comment1.id: self.reply1_for_comment1,
                              self.reply2_for_comment1.id: self.reply2_for_comment1}
 
-    def test_get_post_details_post_dto(self, post_details_setup):
-        post_id = self.post.id
+    def test_get_user_posts_dto(self, post_details_setup):
         storage = StorageClass()
-        post_details = storage.get_post_details(post_id)
+        post_details_list = storage.get_user_posts(
+            self.posted_person.id, 0, 1)
+        post_details = post_details_list[0]
         post_dto = post_details.post
         assert post_dto.id == self.post.id
         assert post_dto.post_content == self.post.post_content
         assert post_dto.posted_at == self.post.posted_at
         assert post_dto.posted_person_id in self.person_dict
 
-    def test_get_post_details_persons_dto(self, post_details_setup):
-        post_id = self.post.id
+    def test_get_user_posts_comments_dto(self, post_details_setup):
         storage = StorageClass()
-        post_details = storage.get_post_details(post_id)
+        post_details_list = storage.get_user_posts(
+            self.posted_person.id, 0, 1)
+        post_details = post_details_list[0]
         person_dto = post_details.persons[0]
         setup_person_details = None
         if person_dto.id in self.person_dict:
@@ -91,10 +93,11 @@ class TestPostDetails:
         assert person_dto.profile_url_pic == setup_person_details.profilePicUrl
         assert person_dto.id == setup_person_details.id
 
-    def test_get_post_details_comments_dto(self, post_details_setup):
-        post_id = self.post.id
+    def test_get_user_posts_comments_replies_dto(self, post_details_setup):
         storage = StorageClass()
-        post_details = storage.get_post_details(post_id)
+        post_details_list = storage.get_user_posts(
+            self.posted_person.id, 0, 1)
+        post_details = post_details_list[0]
         comments_dto = post_details.comments
         setup_comment_details = None
         comment_dto = comments_dto[0]

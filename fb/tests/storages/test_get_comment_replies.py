@@ -33,12 +33,14 @@ class TestGetCommentReplies:
         response_dict[self.reply4.id] = self.reply4
         storage = StorageClass()
         replies_list = storage.get_comment_replies(self.comment_id, 0, 2)
-        response_comment = replies_list[0]
+        response = replies_list[0]
+        response_comment = response.comment
+        response_person = response.person
         setup_comment = response_dict[response_comment.comment_id]
         assert len(replies_list) == 2
         assert response_comment.comment_id == setup_comment.id
         assert response_comment.commented_at == setup_comment.comment_at
         assert response_comment.comment_content == setup_comment.comment_content
-        assert response_comment.commenter.id == setup_comment.person.id
-        assert response_comment.commenter.username == setup_comment.person.username
-        assert response_comment.commenter.profile_url_pic == setup_comment.person.profilePicUrl
+        assert response_person.id == setup_comment.person.id
+        assert response_person.username == setup_comment.person.username
+        assert response_person.profile_url_pic == setup_comment.person.profilePicUrl

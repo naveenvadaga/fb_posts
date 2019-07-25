@@ -1,4 +1,4 @@
 from .models import *
 
 
-__all__ = [Person, React, Comment, Post]
+__all__ = [Person, Reaction, Comment, Post]

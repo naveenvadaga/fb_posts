@@ -10,4 +10,4 @@ class AuthorAdmin(admin.ModelAdmin):
 admin.site.register(Person, AuthorAdmin)
 admin.site.register(Post, AuthorAdmin)
 admin.site.register(Comment, AuthorAdmin)
-admin.site.register(React, AuthorAdmin)
+admin.site.register(Reaction, AuthorAdmin)

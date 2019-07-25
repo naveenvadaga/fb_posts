@@ -29,7 +29,7 @@ def get_post(post_id):
 
     posted = Post.objects.filter(id=post_id).select_related('person')
 
-    reactions_post = React.objects.filter(post_id=post_id).values('react_type')
+    reactions_post = Reaction.objects.filter(post_id=post_id).values('react_type')
     commented = Comment.objects.filter(post_id=post_id).select_related('person').prefetch_related(
         Prefetch('comment_set', to_attr='replies'))
     posted = posted[0]
@@ -64,8 +64,8 @@ def get_post(post_id):
         for reply in comment.replies:
             reply_id.append(int(reply.id))
 
-    comment_reaction = React.objects.filter(comment_id__in=comment_id).values('comment_id', 'react_type')
-    reply_reaction = React.objects.filter(comment_id__in=reply_id).values('comment_id', 'react_type')
+    comment_reaction = Reaction.objects.filter(comment_id__in=comment_id).values('comment_id', 'react_type')
+    reply_reaction = Reaction.objects.filter(comment_id__in=reply_id).values('comment_id', 'react_type')
     comment_reactions = {}
     for a in comment_reaction:
         if int(a['comment_id']) in comment_reactions:
@@ -209,14 +209,14 @@ def get_replies_for_comment(comment_id, offset, limit):
 # react
 def react_to_post(user_id, post_id, reaction_type):
     try:
-        reacted = React.objects.get(person=user_id, post_id=post_id)
+        reacted = Reaction.objects.get(person=user_id, post_id=post_id)
         if reacted.react_type != reaction_type:
-            React.objects.filter(id=reacted.id).update(react_type=reaction_type)
+            Reaction.objects.filter(id=reacted.id).update(react_type=reaction_type)
         else:
-            React.objects.get(id=reacted.id).delete()
+            Reaction.objects.get(id=reacted.id).delete()
             return None
     except ObjectDoesNotExist:
-        react_created = React(react_type=reaction_type, person=user_id, post_id=post_id)
+        react_created = Reaction(react_type=reaction_type, person=user_id, post_id=post_id)
         react_created.save()
         return react_created
 
@@ -224,14 +224,14 @@ def react_to_post(user_id, post_id, reaction_type):
 def react_to_comment(user_id, comment_id, reaction_type):
     try:
         print("fa")
-        reacted = React.objects.get(person=user_id, comment_id=comment_id)
+        reacted = Reaction.objects.get(person=user_id, comment_id=comment_id)
         if reacted.react_type != reaction_type:
-            React.objects.filter(id=reacted.id).update(react_type=reaction_type)
+            Reaction.objects.filter(id=reacted.id).update(react_type=reaction_type)
         else:
-            React.objects.get(id=reacted.id).delete()
+            Reaction.objects.get(id=reacted.id).delete()
             return None
     except ObjectDoesNotExist:
-        react_created = React(react_type=reaction_type, person=user_id, comment_id=comment_id)
+        react_created = Reaction(react_type=reaction_type, person=user_id, comment_id=comment_id)
         react_created.save()
         return react_created
 
@@ -256,7 +256,7 @@ def get_posts_with_more_positive_reactions():
 def get_posts_reacted_by_user(user_id):
     posts_reacted_by_users = []
 
-    posts_reacted_by_user = React.objects.filter(person_id=user_id, comment_id__isnull=True).values('post_id')
+    posts_reacted_by_user = Reaction.objects.filter(person_id=user_id, comment_id__isnull=True).values('post_id')
     for posts in posts_reacted_by_user:
         posts_reacted_by_users.append(posts['id'])
 
@@ -265,7 +265,7 @@ def get_posts_reacted_by_user(user_id):
 
 def get_reactions_to_post(post_id, offset, limit):
     reactions_to_posts = []
-    reactions = React.objects.filter(post_id=post_id).select_related('person')[offset:offset + limit]
+    reactions = Reaction.objects.filter(post_id=post_id).select_related('person')[offset:offset + limit]
     for reaction in reactions:
         reactions_to_posts.append({
             "id": reaction.person_id,
@@ -279,7 +279,7 @@ def get_reactions_to_post(post_id, offset, limit):
 
 def get_reaction_metrics(post_id):
     meterics = {}
-    dict = React.objects.filter(post_id=post_id).values('react_type').annotate(react_count=Count('react_type'))
+    dict = Reaction.objects.filter(post_id=post_id).values('react_type').annotate(react_count=Count('react_type'))
     for d in dict:
         meterics[d['react_type']] = d['react_count']
 
@@ -287,4 +287,4 @@ def get_reaction_metrics(post_id):
 
 
 def get_total_reaction_count():
-    return React.objects.exclude(post__isnull=True).count()
+    return Reaction.objects.exclude(post__isnull=True).count()

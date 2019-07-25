@@ -8,23 +8,23 @@ class CommentInteractor:
         self.presenter = presenter
         self.storage = storage
 
-    def add_comment_to_post(self, post_id: int, commenter_id: int,
-                            comment_text: str) -> dict:
+    def add_comment_to_post_interactor(self, post_id: int, commenter_id: int,
+                                       comment_text: str) -> dict:
         created_comment_id = self.storage.add_comment_to_post(post_id,
                                                               commenter_id,
                                                               comment_text)
         response = self.presenter.create_comment_response(created_comment_id)
         return response
 
-    def add_comment_to_comment(self, comment_id: int, commenter_id: int,
-                               comment_text: str) -> dict:
+    def add_reply_to_comment_interactor(self, comment_id: int, commenter_id: int,
+                                        comment_text: str) -> dict:
         parent_comment_id = self.storage.parent_comment_id(comment_id)
         if parent_comment_id is None:
-            created_comment_id = self.storage.add_comment_to_comment(comment_id,
-                                                                     commenter_id,
-                                                                     comment_text)
+            created_comment_id = self.storage.add_reply_to_comment(comment_id,
+                                                                   commenter_id,
+                                                                   comment_text)
         else:
-            created_comment_id = self.storage.add_comment_to_comment(
+            created_comment_id = self.storage.add_reply_to_comment(
                 parent_comment_id,
                 commenter_id,
                 comment_text)
@@ -32,14 +32,13 @@ class CommentInteractor:
         response = self.presenter.create_comment_response(created_comment_id)
         return response
 
-    def get_comment_replies(self, comment_id: int, offset: int, limit: int):
+    def get_comment_replies_interactor(self, comment_id: int, offset: int, limit: int):
         try:
             self.storage.check_whether_given_id_is_comment_or_not(comment_id)
-
         except SuspiciousOperation:
-            self.presenter.bad_request_invalid_comment_id()
+            self.presenter.raise_invalid_comment_id()
         replies_dto_list = self.storage.get_comment_replies(comment_id, offset,
                                                             limit)
-        response = self.presenter.get_replies_for_comment_response(
+        response = self.presenter.get_comment_replies_response(
             replies_dto_list)
         return response

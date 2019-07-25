@@ -20,7 +20,7 @@ class Person(AbstractUser):
     profilePicUrl = models.URLField(max_length=250, default="https://dummy.url.com/pic.png")
 
 
-class React(models.Model):
+class Reaction(models.Model):
     react_type = models.CharField(max_length=10,
                                   choices=[(reaction.value, reaction.value) for reaction in ReactionChoice])
     person = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

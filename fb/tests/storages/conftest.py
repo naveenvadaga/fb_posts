@@ -21,13 +21,15 @@ def persons_fixture():
 
 @pytest.fixture()
 def comment_fixture(person_fixture, post_fixture):
-    comment = Comment.objects.create(post_id=post_fixture.id, person_id=person_fixture.id, comment_content="")
+    comment = Comment.objects.create(post_id=post_fixture.id, person_id=person_fixture.id,
+                                     comment_content="")
     return comment
 
 
 @pytest.fixture()
 def reply_fixture(comment_fixture, person_fixture):
-    reply = Comment.objects.create(reply_id=comment_fixture.id, person_id=person_fixture.id, comment_content="")
+    reply = Comment.objects.create(reply_id=comment_fixture.id,
+                                   person_id=person_fixture.id, comment_content="")
     return reply
 
 
@@ -39,13 +41,14 @@ def post_fixture(person_fixture):
 
 @pytest.fixture()
 def react_to_comment_fixture(person_fixture, comment_fixture):
-    react = React(person=person_fixture, comment_id=comment_fixture.id, react_type="wow")
+    react = Reaction(person=person_fixture, comment_id=comment_fixture.id,
+                     react_type="wow")
     react.save()
     return react
 
 
 @pytest.fixture()
 def react_to_post_fixture(person_fixture, post_fixture):
-    react = React(person=person_fixture, post_id=post_fixture.id, react_type="haha")
+    react = Reaction(person=person_fixture, post_id=post_fixture.id, react_type="haha")
     react.save()
     return react
