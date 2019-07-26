@@ -14,9 +14,9 @@ class TestReactToCommentExistsOrNot:
             react_to_comment_fixture.person_id,
             react_to_comment_fixture.id)
         assert reaction_dto.id == react_to_comment_fixture.id
-        assert reaction_dto.react_type == react_to_comment_fixture.react_type
+        assert reaction_dto.reaction_type == react_to_comment_fixture.react_type
         assert reaction_dto.reacted_person_id == react_to_comment_fixture.person_id
-        assert reaction_dto.comment == react_to_comment_fixture.comment_id
+        assert reaction_dto.comment_id == react_to_comment_fixture.comment_id
 
     def test_comment_reaction_exists_or_not_raises_exception(self):
         storage = StorageClass()

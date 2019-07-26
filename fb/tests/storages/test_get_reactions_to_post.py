@@ -44,4 +44,4 @@ class TestGetReactionsToPost:
         assert response_reaction.id == setup_reaction.id
         assert response_reaction.username == setup_reaction.person.username
         assert response_reaction.profile_url_pic == setup_reaction.person.profilePicUrl
-        assert response_reaction.reaction_type == setup_reaction.react_type
+        assert response_reaction.reaction.reaction_type == setup_reaction.react_type

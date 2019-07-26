@@ -21,11 +21,11 @@ class PostDto:
 
 @dataclass
 class ReactionDto:
-    react_type: str
+    reaction_type: str
     id: int = 0
     reacted_person_id: int = 0
-    post: int = 0
-    comment: int = 0
+    post_id: int = 0
+    comment_id: int = 0
 
 
 @dataclass
@@ -38,14 +38,15 @@ class PostMetricsDto:
     type: str
     count: int
 
+
 @dataclass
 class CommentDto:
     comment_id: int
     commenter_id: int
     commented_at: datetime
     comment_content: str
-    post: int = 0
-    reply: int = 0
+    post_id: int = 0
+    commented_on_id: int = 0
 
 
 @dataclass

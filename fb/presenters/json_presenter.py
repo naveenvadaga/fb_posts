@@ -1,5 +1,5 @@
 from fb.interactors.presenters.json_presenter import *
-from fb.interactors.storages.storage import CommentWithPersonDto
+from fb.interactors.storages.storage import CommentWithPersonDto, PersonDto, ReactionDto, PostDto
 
 
 class Presenter(JsonPresenter):
@@ -33,7 +33,7 @@ class Presenter(JsonPresenter):
         reactions_list = []
         for reaction_dto in reactions_dto_list:
             reactions_list.append(self.get_reactions_detail_dict(reaction_dto))
-        return {"reactions": list}
+        return {"reactions": reactions_list}
 
     def get_reactions_detail_dict(self, reaction_for_post_dto):
         reaction_dto = reaction_for_post_dto.reaction
@@ -69,9 +69,9 @@ class Presenter(JsonPresenter):
             "profile_pic_url": person_dto.profile_url_pic
         }
         return {
-            "comment_id": comment_dto.id,
+            "comment_id": comment_dto.comment_id,
             "commenter": commenter_dict,
-            "commented_at": comment_dto.comment_at,
+            "commented_at": comment_dto.commented_at,
             "comment_content": comment_dto.comment_content
         }
 
@@ -85,22 +85,19 @@ class Presenter(JsonPresenter):
 
     def get_post_details_response(self, get_post_dto: UserPostDto) -> dict:
         post_dto = get_post_dto.post
-        comments_reactions_dict = self.get_comments_reactions_stats_dict(
+        comments_reactions_dict = self.get_comment_wise_reaction_stats_dict(
             get_post_dto.reactions)
         person_dto_list = get_post_dto.persons
         comments_dto = get_post_dto.comments
         persons_dict = self.get_persons_dict(person_dto_list)
         comments_dict = self.get_comments_dict(comments_dto, persons_dict, comments_reactions_dict)
         comments_list = self.get_comment_details_dict(comments_dto, comments_dict)
-        get_post_dict = {}
-        get_post_dict["post_id"] = post_dto.id
-        get_post_dict["posted_by"] = persons_dict[post_dto.posted_person_id]
-        get_post_dict["posted_at"] = post_dto.posted_at.strftime("%Y-%m-%d, %H:%M:%S")
-        get_post_dict["post_content"] = post_dto.post_content
-        get_post_dict["reactions"] = self.get_post_reactions_stats_dict(post_dto.id,
-                                                                        get_post_dto.reactions)
-        get_post_dict["comments"] = comments_list
-        get_post_dict["comments_count"] = len(comments_list)
+        get_post_dict = {"post_id": post_dto.id, "posted_by": persons_dict[post_dto.posted_person_id],
+                         "posted_at": post_dto.posted_at.strftime("%Y-%m-%d, %H:%M:%S"),
+                         "post_content": post_dto.post_content,
+                         "reactions": self.get_post_reaction_stats_dict(post_dto.id,
+                                                                        get_post_dto.reactions),
+                         "comments": comments_list, "comments_count": len(comments_list)}
         return get_post_dict
 
     def get_persons_dict(self, person_dto_list):
@@ -113,56 +110,44 @@ class Presenter(JsonPresenter):
             }
         return persons_dict
 
-    def get_person_dict(self, person_id, person_dto_list):
-        for person_dto in person_dto_list:
-            if person_dto.id == person_id:
-                return {
-                    "name": person_dto.username,
-                    "user_id": person_dto.id,
-                    "profile_pic_url": person_dto.profile_url_pic
-                }
-
-    def get_post_reactions_stats_dict(self, post_id, reaction_dto_list):
+    def get_post_reaction_stats_dict(self, post_id, reaction_dto_list):
         reactions_types = []
         for reaction in reaction_dto_list:
-            if reaction.post == post_id:
-                reactions_types.append(reaction.react_type)
+            if reaction.post_id == post_id:
+                reactions_types.append(reaction.reaction_type)
         reactions_types_count = len(reactions_types)
         return {
             "type": reactions_types,
             "count": reactions_types_count
         }
 
-    def get_comments_reactions_stats_dict(self, reaction_dto_list):
+    def get_comment_wise_reaction_stats_dict(self, reaction_dto_list):
         reactions_stats_dict = {}
         for reaction in reaction_dto_list:
             try:
-                reactions_stats_dict[reaction.comment]["count"] = reactions_stats_dict[
-                                                                      reaction.comment][
-                                                                      "count"] + 1
-                reactions_stats_dict[reaction.comment]["type"].append(reaction.react_type)
-            except Exception:
-                reactions_stats_dict[reaction.comment] = {
-                    "count": 1,
-                    "type": [reaction.react_type]
-                }
+                reactions_stats_dict[reaction.comment_id]["count"] = reactions_stats_dict[reaction.comment_id][
+                                                                         "count"] + 1
+                reactions_stats_dict[reaction.comment_id]["type"].append(reaction.reaction_type)
+            except KeyError:
+                reactions_stats_dict[reaction.comment_id] = {
+                    "count": 1, "type": [reaction.reaction_type]}
         return reactions_stats_dict
 
     def get_comment_details_dict(self, comments, comments_dict):
         comments_list = []
         for comment in comments:
-            if comment.post != 0:
-                replies = self.get_replies_for_comment_dict(comment.comment_id, comments, comments_dict)
+            if comment.post_id != 0:
+                replies = self.get_comment_replies_dict(comment.comment_id, comments, comments_dict)
                 dict = {**comments_dict[comment.comment_id],
                         "replies_count": len(replies),
                         "replies": replies}
                 comments_list.append(dict)
         return comments_list
 
-    def get_replies_for_comment_dict(self, comment_id, comments, comments_dict):
+    def get_comment_replies_dict(self, comment_id, comments, comments_dict):
         replies_list = []
         for comment in comments:
-            if comment.reply == comment_id:
+            if comment.commented_on_id == comment_id:
                 replies_list.append(comments_dict[comment.comment_id])
         return replies_list
 
@@ -174,11 +159,9 @@ class Presenter(JsonPresenter):
         return comments_dict
 
     def get_comment_dict(self, comment, persons_dict, comments_reactions_dict):
-        comment_dict = {}
-        comment_dict["comment_id"] = comment.comment_id
-        comment_dict["commenter"] = persons_dict[comment.commenter_id]
-        comment_dict["commented_at"] = comment.commented_at.strftime("%m/%d/%Y, %H:%M:%S")
-        comment_dict["comment_content"] = comment.comment_content
+        comment_dict = {"comment_id": comment.comment_id, "commenter": persons_dict[comment.commenter_id],
+                        "commented_at": comment.commented_at.strftime("%Y-%m-%d, %H:%M:%S"),
+                        "comment_content": comment.comment_content}
         if comment.comment_id in comments_reactions_dict:
             comment_dict["reactions"] = comments_reactions_dict[comment.comment_id]
         else:

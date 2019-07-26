@@ -16,7 +16,7 @@ class ReactInteractor:
             existing_react = self.storage.post_reaction_exists_or_not(
                 reacted_by_id,
                 post_id)
-            if existing_react.react_type == reaction_type:
+            if existing_react.reaction_type == reaction_type:
                 self.storage.delete_reaction(existing_react.id)
                 response = self.presenter.create_reaction_response(None)
             else:
@@ -38,7 +38,7 @@ class ReactInteractor:
             existing_react = self.storage.comment_reaction_exists_or_not(
                 reacted_by_id,
                 comment_id)
-            if existing_react.react_type == reaction_type:
+            if existing_react.reaction_type == reaction_type:
                 self.storage.delete_reaction(existing_react.id)
                 response = self.presenter.create_reaction_response(None)
             else:

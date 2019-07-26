@@ -169,10 +169,10 @@ class StorageClass(Storage):
     def create_reactions_dto_list(self, post_id, post_reactions, comment_reactions):
         reactions_dto_list = []
         for reaction in post_reactions:
-            reactions_dto_list.append(ReactionDto(post=post_id, react_type=reaction))
+            reactions_dto_list.append(ReactionDto(post_id=post_id, reaction_type=reaction))
         for reaction in comment_reactions:
-            reactions_dto_list.append(ReactionDto(comment=reaction['comment_id'],
-                                                  react_type=reaction['react_type']))
+            reactions_dto_list.append(ReactionDto(comment_id=reaction['comment_id'],
+                                                  reaction_type=reaction['react_type']))
         return reactions_dto_list
 
     def create_persons_dto_list_and_comments_dto_list(self, posted_person,
@@ -190,12 +190,12 @@ class StorageClass(Storage):
 
     def create_comment_dto(self, comment):
         comment_dto = CommentDto(comment.id, comment.person.id, comment.comment_at,
-                                 comment.comment_content, post=comment.post_id)
+                                 comment.comment_content, post_id=comment.post_id)
         return comment_dto
 
     def create_reply_dto(self, reply):
         comment_dto = CommentDto(reply.id, reply.person.id, reply.comment_at,
-                                 reply.comment_content, reply=reply.reply_id)
+                                 reply.comment_content, commented_on_id=reply.reply_id)
         return comment_dto
 
     def create_person_dto(self, person):

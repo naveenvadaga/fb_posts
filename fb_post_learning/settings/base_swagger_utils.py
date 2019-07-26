@@ -1,8 +1,6 @@
 import os
 
-
 from fb_post_learning.settings.base import *
-
 
 # swagger utils #
 
@@ -21,7 +19,8 @@ from django_swagger_utils.drf_server.utils.general.import_app_settings import im
 
 THIRD_PARTY_APPS = []
 APPS = [
-    "fb_post"
+    "fb_post",
+    "fb"
 
 ]
 
@@ -35,7 +34,6 @@ for app_name in APPS:
         locals().update({name: _dict["module_dict"][name] for name in _dict["to_import"]})
     except ImportError as err:
         print(err)
-
 
 # *************************** Swagger Utils ***************************
 
@@ -54,11 +52,12 @@ SWAGGER_UTILS = {
     "CUSTOM_EXCEPTIONS": {
         "CustomException": {
             "http_status_code": 404,
-            "is_json" : True,
+            "is_json": True,
         }
     },
     "APPS": {
         "fb_post": {},
+        "fb": {}
     },
     "HOST": os.environ.get('APIGATEWAY_ENDPOINT', '127.0.0.1:8000'),
 }

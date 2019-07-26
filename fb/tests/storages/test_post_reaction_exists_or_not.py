@@ -13,9 +13,9 @@ class TestReactToPostExistsOrNot:
         react_dto = storage.post_reaction_exists_or_not(
             react_to_post_fixture.person.id, react_to_post_fixture.id)
         assert react_dto.id == react_to_post_fixture.id
-        assert react_dto.react_type == react_to_post_fixture.react_type
+        assert react_dto.reaction_type == react_to_post_fixture.react_type
         assert react_dto.reacted_person_id == react_to_post_fixture.person.id
-        assert react_dto.post == react_to_post_fixture.post.id
+        assert react_dto.post_id == react_to_post_fixture.post.id
 
     def test_post_reaction_exists_or_not_raises_exception(self):
         storage = StorageClass()
