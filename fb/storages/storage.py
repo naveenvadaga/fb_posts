@@ -19,15 +19,14 @@ class StorageClass(Storage):
         created_comment.save()
         return created_comment.id
 
-    def parent_comment_id(self, comment_id) -> Optional[int]:
-        reply_id = Comment.objects.get(id=comment_id).values_list('reply',
-                                                                  flat=True)
+    def get_parent_comment_id(self, comment_id) -> Optional[int]:
+        reply_id = Comment.objects.get(id=comment_id).reply_id
         return reply_id
 
     def add_reply_to_comment(self, comment_id: int, commenter_id: int,
                              comment_text: str) -> int:
         created_comment = Comment(person_id=commenter_id,
-                                  comment_text=comment_text,
+                                  comment_content=comment_text,
                                   reply_id=comment_id)
         created_comment.save()
         return created_comment.id
@@ -35,34 +34,34 @@ class StorageClass(Storage):
     def delete_post(self, post_id: int) -> None:
         Post.objects.get(id=post_id).delete()
 
-    def get_posts_reactions_count(self) -> int:
+    def get_total_post_reactions_count(self) -> int:
         return Reaction.objects.exclude(post__isnull=True).count()
 
-    def get_user_reacted_posts(self, user_id: int) -> List[int]:
+    def get_user_reacted_post_ids(self, user_id: int) -> List[int]:
         post_ids_list = Reaction.objects.filter(person_id=user_id,
                                                 comment_id__isnull=True). \
             values_list('post_id', flat=True)
         return post_ids_list
 
-    def get_positive_reacted_posts(self) -> List[int]:
-        reaction1 = Count('react',
-                          filter=Q(react__react_type=ReactionChoice.Haha.value))
-        reaction2 = Count('react',
-                          filter=Q(react__react_type=ReactionChoice.Wow.value))
-        reaction3 = Count('react',
-                          filter=Q(react__react_type=ReactionChoice.Like.value))
-        reaction4 = Count('react',
-                          filter=Q(react__react_type=ReactionChoice.Love.value))
-        reaction5 = Count('react', filter=Q(
-            react__react_type=ReactionChoice.Angry.value))
-        reaction6 = Count('react',
-                          filter=Q(react__react_type=ReactionChoice.Sad.value))
+    def get_more_positive_reacted_post_ids(self) -> List[int]:
+        reaction1 = Count('reaction',
+                          filter=Q(reaction__react_type=ReactionChoice.Haha.value))
+        reaction2 = Count('reaction',
+                          filter=Q(reaction__react_type=ReactionChoice.Wow.value))
+        reaction3 = Count('reaction',
+                          filter=Q(reaction__react_type=ReactionChoice.Like.value))
+        reaction4 = Count('reaction',
+                          filter=Q(reaction__react_type=ReactionChoice.Love.value))
+        reaction5 = Count('reaction', filter=Q(
+            reaction__react_type=ReactionChoice.Angry.value))
+        reaction6 = Count('reaction',
+                          filter=Q(reaction__react_type=ReactionChoice.Sad.value))
         posts_id_list = Post.objects.annotate(
             positive=reaction1 + reaction2 + reaction3 + reaction4 - reaction5 - reaction6).filter(
             positive__gt=0 > 0).values_list('id', flat=True)
         return posts_id_list
 
-    def get_post_reactions_metrics(self, post_id: int) -> List[PostMetricsDto]:
+    def get_post_reaction_metrics(self, post_id: int) -> List[PostMetricsDto]:
         metrics = []
         reactions_type_list_dict = Reaction.objects.filter(post_id=post_id).values(
             'react_type').annotate(
@@ -83,7 +82,7 @@ class StorageClass(Storage):
                                       reaction.person.profilePicUrl, reaction_dto))
         return reactions_to_posts_list
 
-    def check_whether_given_id_is_comment_or_not(self, comment_id: int) -> None:
+    def is_id_comment(self, comment_id: int) -> None:
         from django.core.exceptions import SuspiciousOperation
         if Comment.objects.filter(id=comment_id,
                                   reply_id__isnull=False).exists():
@@ -102,8 +101,8 @@ class StorageClass(Storage):
             comments_replies_list.append(comment_with_person_dto)
         return comments_replies_list
 
-    def post_reaction_exists_or_not(self, reacted_person_id: int,
-                                    post_id: int) -> ReactionDto:
+    def get_post_reaction(self, reacted_person_id: int,
+                          post_id: int) -> ReactionDto:
         reacted = Reaction.objects.get(person_id=reacted_person_id,
                                        post_id=post_id)
         reaction_dto = ReactionDto(reacted.react_type, reacted.id,
@@ -125,8 +124,8 @@ class StorageClass(Storage):
         created_reaction.save()
         return created_reaction.id
 
-    def comment_reaction_exists_or_not(self, reacted_person_id: int,
-                                       comment_id: int) -> ReactionDto:
+    def get_comment_reaction(self, reacted_person_id: int,
+                             comment_id: int) -> ReactionDto:
         reacted_reaction = Reaction.objects.get(person_id=reacted_person_id,
                                                 comment_id=comment_id)
         reaction_dto = ReactionDto(reacted_reaction.react_type,

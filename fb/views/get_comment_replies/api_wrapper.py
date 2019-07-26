@@ -1,3 +1,4 @@
+from django.core.exceptions import SuspiciousOperation
 from django_swagger_utils.drf_server.utils.decorator.interface_decorator \
     import validate_decorator
 from .validator_class import ValidatorClass
@@ -5,25 +6,18 @@ from .validator_class import ValidatorClass
 
 @validate_decorator(validator_class=ValidatorClass)
 def api_wrapper(*args, **kwargs):
-    # ---------MOCK IMPLEMENTATION---------
-
+    from fb.presenters.json_presenter import Presenter
+    from fb.storages.storage import StorageClass
+    from fb.interactors.comment_interactor import CommentInteractor
+    comment_id = kwargs['comment_id']
+    offset = kwargs['request_query_params']['offset']
+    limit = kwargs['request_query_params']['limit']
+    json_presenter = Presenter()
+    storage = StorageClass()
+    comment_interactor = CommentInteractor(json_presenter, storage)
     try:
-        from fb.views.get_comment_replies.tests.test_case_01 \
-            import TEST_CASE as test_case
-    except ImportError:
-        from fb.views.get_comment_replies.tests.test_case_01 \
-            import test_case
-
-    from django_swagger_utils.drf_server.utils.server_gen.mock_response \
-        import mock_response
-    try:
-        from fb.views.get_comment_replies.request_response_mocks \
-            import RESPONSE_200_JSON
-    except ImportError:
-        RESPONSE_200_JSON = ''
-    response_tuple = mock_response(
-        app_name="fb", test_case=test_case,
-        operation_name="get_comment_replies",
-        kwargs=kwargs, default_response_body=RESPONSE_200_JSON,
-        group_name="")
-    return response_tuple[1]
+        response = comment_interactor.get_comment_replies_interactor(comment_id, offset, limit)
+        return response
+    except SuspiciousOperation:
+        from django_swagger_utils.drf_server.exceptions import BadRequest
+        raise BadRequest('Invalid comment id', 'INVALID_COMMENT_ID')

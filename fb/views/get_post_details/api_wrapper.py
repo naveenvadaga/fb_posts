@@ -5,25 +5,12 @@ from .validator_class import ValidatorClass
 
 @validate_decorator(validator_class=ValidatorClass)
 def api_wrapper(*args, **kwargs):
-    # ---------MOCK IMPLEMENTATION---------
-
-    try:
-        from fb.views.get_post_details.tests.test_case_01 \
-            import TEST_CASE as test_case
-    except ImportError:
-        from fb.views.get_post_details.tests.test_case_01 \
-            import test_case
-
-    from django_swagger_utils.drf_server.utils.server_gen.mock_response \
-        import mock_response
-    try:
-        from fb.views.get_post_details.request_response_mocks \
-            import RESPONSE_200_JSON
-    except ImportError:
-        RESPONSE_200_JSON = ''
-    response_tuple = mock_response(
-        app_name="fb", test_case=test_case,
-        operation_name="get_post_details",
-        kwargs=kwargs, default_response_body=RESPONSE_200_JSON,
-        group_name="")
-    return response_tuple[1]
+    post_id=kwargs['post_id']
+    from fb.presenters.json_presenter import Presenter
+    from fb.storages.storage import StorageClass
+    from fb.interactors.post_interactor import PostInteractor
+    json_presenter = Presenter()
+    storage = StorageClass()
+    post_interactor = PostInteractor(json_presenter, storage)
+    response = post_interactor.get_post_details_interactor(post_id)
+    return response

@@ -13,7 +13,7 @@ class Presenter(JsonPresenter):
     def create_comment_response(self, comment_id: int) -> dict:
         return {"id": comment_id}
 
-    def get_posts_reactions_count_response(self, count: int) -> dict:
+    def get_post_reactions_count_response(self, count: int) -> dict:
         return {"count": count}
 
     def get_user_reacted_posts_response(self, list_of_posts_id: List[int]) -> dict:
@@ -40,7 +40,7 @@ class Presenter(JsonPresenter):
         reaction_dict = {"username": reaction_for_post_dto.username,
                          "id": reaction_for_post_dto.id,
                          "profile_pic_url": reaction_for_post_dto.profile_url_pic,
-                         "reaction_type": reaction_dto.react_type}
+                         "reaction_type": reaction_dto.reaction_type}
         return reaction_dict
 
     def get_post_metrics_response(self, post_metrics_dto_list: List[PostMetricsDto]) -> \
@@ -64,8 +64,8 @@ class Presenter(JsonPresenter):
         comment_dto = comment_with_person_dto.comment
         person_dto = comment_with_person_dto.person
         commenter_dict = {
-            "name": person_dto.username,
-            "user_id": person_dto.id,
+            "username": person_dto.username,
+            "id": person_dto.id,
             "profile_pic_url": person_dto.profile_url_pic
         }
         return {
@@ -93,7 +93,7 @@ class Presenter(JsonPresenter):
         comments_dict = self.get_comments_dict(comments_dto, persons_dict, comments_reactions_dict)
         comments_list = self.get_comment_details_dict(comments_dto, comments_dict)
         get_post_dict = {"post_id": post_dto.id, "posted_by": persons_dict[post_dto.posted_person_id],
-                         "posted_at": post_dto.posted_at.strftime("%Y-%m-%d, %H:%M:%S"),
+                         "posted_at": post_dto.posted_at.strftime("%Y-%m-%d %H:%M:%S"),
                          "post_content": post_dto.post_content,
                          "reactions": self.get_post_reaction_stats_dict(post_dto.id,
                                                                         get_post_dto.reactions),
@@ -104,8 +104,8 @@ class Presenter(JsonPresenter):
         persons_dict = {}
         for person_dto in person_dto_list:
             persons_dict[person_dto.id] = {
-                "name": person_dto.username,
-                "user_id": person_dto.id,
+                "username": person_dto.username,
+                "id": person_dto.id,
                 "profile_pic_url": person_dto.profile_url_pic
             }
         return persons_dict
@@ -160,7 +160,7 @@ class Presenter(JsonPresenter):
 
     def get_comment_dict(self, comment, persons_dict, comments_reactions_dict):
         comment_dict = {"comment_id": comment.comment_id, "commenter": persons_dict[comment.commenter_id],
-                        "commented_at": comment.commented_at.strftime("%Y-%m-%d, %H:%M:%S"),
+                        "commented_at": comment.commented_at.strftime("%Y-%m-%d %H:%M:%S"),
                         "comment_content": comment.comment_content}
         if comment.comment_id in comments_reactions_dict:
             comment_dict["reactions"] = comments_reactions_dict[comment.comment_id]

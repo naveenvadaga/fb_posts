@@ -12,7 +12,7 @@ REQUEST_BODY = """
 TEST_CASE = {
     "request": {
         "path_params": {"comment_id": "1234"},
-        "query_params": {"offset": 388, "limit": 541},
+        "query_params": {"offset": 846, "limit": 852},
         "header_params": {},
         "securities": {},
         "body": REQUEST_BODY,

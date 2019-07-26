@@ -23,7 +23,7 @@ class TestGetCommentReplies(unittest.TestCase):
         comment_id = 1
         offset = 0
         limit = 2
-        mock_storage.check_whether_given_id_is_comment_or_not.return_value = None
+        mock_storage.is_id_comment.return_value = None
         mock_storage.get_comment_replies_interactor.return_value = replies_dto_list
         mock_json_presenter.get_comment_replies_response.return_value = mock_response
 
@@ -31,7 +31,7 @@ class TestGetCommentReplies(unittest.TestCase):
                                                mock_storage)
         response_from_get_comment_replies = comment_interactor.get_comment_replies_interactor(
             comment_id, offset, limit)
-        mock_storage.check_whether_given_id_is_comment_or_not.assert_called_once_with(
+        mock_storage.is_id_comment.assert_called_once_with(
             comment_id)
         mock_storage.get_comment_replies_interactor.assert_called_once_with(comment_id,
                                                                             offset, limit)
@@ -45,13 +45,13 @@ class TestGetCommentReplies(unittest.TestCase):
         comment_id = 1
         offset = 0
         limit = 2
-        mock_storage.check_whether_given_id_is_comment_or_not.side_effect = SuspiciousOperation
+        mock_storage.is_id_comment.side_effect = SuspiciousOperation
         mock_json_presenter.raise_invalid_comment_id.side_effect = BadRequest
         comment_interactor = CommentInteractor(mock_json_presenter,
                                                mock_storage)
         with self.assertRaises(BadRequest):
             comment_interactor.get_comment_replies_interactor(comment_id, offset, limit)
 
-        mock_storage.check_whether_given_id_is_comment_or_not.assert_called_once_with(
+        mock_storage.is_id_comment.assert_called_once_with(
             comment_id)
         mock_json_presenter.raise_invalid_comment_id.assert_called_once()

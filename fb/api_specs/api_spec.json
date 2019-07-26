@@ -153,6 +153,17 @@
         "comment_content"
       ]
     },
+    "comment_replies": {
+      "type": "object",
+      "properties": {
+        "replies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ReplyDetailsForComment"
+          }
+        }
+      }
+    },
     "CommentDetails": {
       "type": "object",
       "properties": {
@@ -203,6 +214,17 @@
           "$ref": "#/definitions/ReactType"
         }
       ]
+    },
+    "PersonsReaction": {
+      "type": "object",
+      "properties": {
+        "reactions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PersonReaction"
+          }
+        }
+      }
     },
     "PostId": {
       "type": "object",
@@ -341,10 +363,7 @@
     "GetCommentRepliesDetailsResponse": {
       "description": "response for get replies for comment",
       "schema": {
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/ReplyDetailsForComment"
-        }
+        "$ref": "#/definitions/comment_replies"
       }
     },
     "GetPostsPostedByPersonResponse": {
@@ -359,10 +378,7 @@
     "GetReactionsForThePost": {
       "description": "response for the reactions to a post",
       "schema": {
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/PersonReaction"
-        }
+        "$ref": "#/definitions/PersonsReaction"
       }
     },
     "GetListOfPostResponse": {
@@ -499,7 +515,7 @@
     "/post/{post_id}/comment/": {
       "post": {
         "summary": "comment a post",
-        "operationId": "post_comment_for_post",
+        "operationId": "add_post_comment",
         "parameters": [
           {
             "$ref": "#/parameters/PostId"
@@ -525,7 +541,7 @@
     "/comment/{comment_id}/reply/": {
       "post": {
         "summary": "reply for  a comment",
-        "operationId": "post_comment_for_comment",
+        "operationId": "add_comment_reply",
         "parameters": [
           {
             "$ref": "#/parameters/CommentId"
@@ -551,7 +567,7 @@
     "/post/{post_id}/react/": {
       "post": {
         "summary": "react to a post ",
-        "operationId": "post_react_to_post",
+        "operationId": "add_post_reaction",
         "parameters": [
           {
             "$ref": "#/parameters/PostId"
@@ -575,7 +591,7 @@
       },
       "get": {
         "summary": "get reactions for the post ",
-        "operationId": "get_reactions_for_post",
+        "operationId": "get_post_reactions",
         "parameters": [
           {
             "$ref": "#/parameters/PostId"
@@ -603,7 +619,7 @@
     "/comment/{comment_id}/react/": {
       "post": {
         "summary": "react to comment",
-        "operationId": "post_react_to_comment",
+        "operationId": "add_comment_reaction",
         "parameters": [
           {
             "$ref": "#/parameters/CommentId"
@@ -645,10 +661,22 @@
     "/person/{user_id}/post/": {
       "get": {
         "summary": "get posts posted by person",
-        "operationId": "get_posts_posted_by_person",
+        "operationId": "get_user_posts",
         "parameters": [
           {
             "$ref": "#/parameters/UserId"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": " offset",
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": " limit",
+            "type": "integer"
           }
         ],
         "responses": {
@@ -661,7 +689,7 @@
     "/person/{user_id}/post/react/": {
       "get": {
         "summary": "get post reacted by user",
-        "operationId": "get_post_reacted_by_user",
+        "operationId": "get_user_reacted_post",
         "parameters": [
           {
             "$ref": "#/parameters/UserId"
@@ -677,7 +705,7 @@
     "/post/react/count/": {
       "get": {
         "summary": "get total reactions for posts ",
-        "operationId": "get_reactions_count_for_posts",
+        "operationId": "get_post_reactions_count",
         "parameters": [
         ],
         "responses": {

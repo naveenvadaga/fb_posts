@@ -1,7 +1,7 @@
 import abc
 from typing import Optional, List
 from ..storages.storage import PersonWithReactionDto, CommentDto, UserPostDto, \
-    PostMetricsDto
+    PostMetricsDto, CommentWithPersonDto
 
 
 class JsonPresenter:
@@ -25,7 +25,7 @@ class JsonPresenter:
         pass
 
     @abc.abstractmethod
-    def get_posts_reactions_count_response(self, count: int) -> dict:
+    def get_post_reactions_count_response(self, count: int) -> dict:
         pass
 
     @abc.abstractmethod
@@ -41,7 +41,7 @@ class JsonPresenter:
         pass
 
     @abc.abstractmethod
-    def get_comment_replies_response(self, replies: List[CommentDto]) -> dict:
+    def get_comment_replies_response(self, replies: List[CommentWithPersonDto]) -> dict:
         pass
 
     @abc.abstractmethod

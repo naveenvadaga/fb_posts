@@ -30,7 +30,7 @@ class TestGetPostMetrics:
 
     def test_get_post_metrics_returns_metrics(self, metrics_setup):
         storage = StorageClass()
-        reaction_metrics = storage.get_post_reactions_metrics(self.post_id)
+        reaction_metrics = storage.get_post_reaction_metrics(self.post_id)
         dict = {}
         for dto in reaction_metrics:
             dict[dto.type] = dto.count
@@ -43,5 +43,5 @@ class TestGetPostMetrics:
     def test_get_post_metrics_returns_empty_metrics(self, post_fixture):
         post_id = post_fixture.id
         storage = StorageClass()
-        reaction_metrics = storage.get_post_reactions_metrics(post_id)
+        reaction_metrics = storage.get_post_reaction_metrics(post_id)
         assert len(reaction_metrics) == 0

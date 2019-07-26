@@ -13,12 +13,12 @@ class TestGetReactionsCountForPost(unittest.TestCase):
 
         count = 3
         mock_response = {'count': count}
-        mock_storage.get_posts_reactions_count.return_value = count
-        mock_json_presenter.get_posts_reactions_count_response.return_value = mock_response
+        mock_storage.get_total_post_reactions_count.return_value = count
+        mock_json_presenter.get_post_reactions_count_response.return_value = mock_response
         post_interactor = PostInteractor(mock_json_presenter, mock_storage)
-        response_from_get_reactions_count_post = post_interactor.get_posts_reactions_count_interactor()
+        response_from_get_reactions_count_post = post_interactor.get_post_reactions_count_interactor()
 
-        mock_storage.get_posts_reactions_count.assert_called_once()
-        mock_json_presenter.get_posts_reactions_count_response.assert_called_once_with(
+        mock_storage.get_total_post_reactions_count.assert_called_once()
+        mock_json_presenter.get_post_reactions_count_response.assert_called_once_with(
             count)
         assert response_from_get_reactions_count_post == mock_response

@@ -81,17 +81,17 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def parent_comment_id(self, comment_id) -> Optional[int]:
+    def get_parent_comment_id(self, comment_id) -> Optional[int]:
         pass
 
     @abc.abstractmethod
-    def post_reaction_exists_or_not(self, reacted_person_id: int,
-                                    post_id: int) -> ReactionDto:
+    def get_post_reaction(self, reacted_person_id: int,
+                          post_id: int) -> ReactionDto:
         pass
 
     @abc.abstractmethod
-    def comment_reaction_exists_or_not(self, reacted_person_id: int,
-                                       comment_id: int) -> ReactionDto:
+    def get_comment_reaction(self, reacted_person_id: int,
+                             comment_id: int) -> ReactionDto:
         pass
 
     @abc.abstractmethod
@@ -113,32 +113,32 @@ class Storage:
 
     @abc.abstractmethod
     def get_post_reactions(self, post_id: int, offset: int, limit: int) -> List[
-        PersonWithReactionDto]:
+         PersonWithReactionDto]:
         pass
 
     @abc.abstractmethod
-    def get_posts_reactions_count(self) -> int:
+    def get_total_post_reactions_count(self) -> int:
         pass
 
     @abc.abstractmethod
-    def get_user_reacted_posts(self, user_id: int) -> List[int]:
+    def get_user_reacted_post_ids(self, user_id: int) -> List[int]:
         pass
 
     @abc.abstractmethod
-    def get_post_reactions_metrics(self, post_id: int) -> List[PostMetricsDto]:
+    def get_post_reaction_metrics(self, post_id: int) -> List[PostMetricsDto]:
         pass
 
     @abc.abstractmethod
-    def get_positive_reacted_posts(self) -> List[int]:
+    def get_more_positive_reacted_post_ids(self) -> List[int]:
         pass
 
     @abc.abstractmethod
-    def check_whether_given_id_is_comment_or_not(self, comment_id: int) -> None:
+    def is_id_comment(self, comment_id: int) -> None:
         pass
 
     @abc.abstractmethod
     def get_comment_replies(self, comment_id: int, offset: int, limit: int) -> List[
-        CommentWithPersonDto]:
+         CommentWithPersonDto]:
         pass
 
     @abc.abstractmethod
@@ -151,5 +151,5 @@ class Storage:
 
     @abc.abstractmethod
     def get_user_posts(self, person_id: int, offset: int, limit: int) -> List[
-        UserPostDto]:
+         UserPostDto]:
         pass

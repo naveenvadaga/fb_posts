@@ -25,25 +25,25 @@ class PostInteractor:
         response = self.presenter.delete_post_response()
         return response
 
-    def get_posts_reactions_count_interactor(self) -> dict:
-        count = self.storage.get_posts_reactions_count()
-        response = self.presenter.get_posts_reactions_count_response(count)
+    def get_post_reactions_count_interactor(self) -> dict:
+        count = self.storage.get_total_post_reactions_count()
+        response = self.presenter.get_post_reactions_count_response(count)
         return response
 
     def get_user_reacted_posts_interactor(self, user_id: int) -> dict:
-        post_ids_list = self.storage.get_user_reacted_posts(user_id)
+        post_ids_list = self.storage.get_user_reacted_post_ids(user_id)
         response = self.presenter.get_user_reacted_posts_response(
             post_ids_list)
         return response
 
     def get_post_metrics_interactor(self, post_id: int) -> dict:
-        post_metrics_dto_list = self.storage.get_post_reactions_metrics(post_id)
+        post_metrics_dto_list = self.storage.get_post_reaction_metrics(post_id)
         response = self.presenter.get_post_metrics_response(
             post_metrics_dto_list)
         return response
 
-    def get_positive_reacted_posts_interactor(self) -> dict:
-        positive_reacted_post_list = self.storage.get_positive_reacted_posts()
+    def get_more_positive_reacted_post_ids_interactor(self) -> dict:
+        positive_reacted_post_list = self.storage.get_more_positive_reacted_post_ids()
         response = self.presenter.get_positive_reacted_posts_response(
             positive_reacted_post_list)
         return response

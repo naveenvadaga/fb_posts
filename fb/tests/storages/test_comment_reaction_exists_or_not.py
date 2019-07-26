@@ -10,7 +10,7 @@ class TestReactToCommentExistsOrNot:
     def test_comment_reaction_exists_or_not_returns_react_dto(self,
                                                               react_to_comment_fixture):
         storage = StorageClass()
-        reaction_dto = storage.comment_reaction_exists_or_not(
+        reaction_dto = storage.get_comment_reaction(
             react_to_comment_fixture.person_id,
             react_to_comment_fixture.id)
         assert reaction_dto.id == react_to_comment_fixture.id
@@ -21,4 +21,4 @@ class TestReactToCommentExistsOrNot:
     def test_comment_reaction_exists_or_not_raises_exception(self):
         storage = StorageClass()
         with pytest.raises(ObjectDoesNotExist):
-            storage.post_reaction_exists_or_not(1, 1)
+            storage.get_post_reaction(1, 1)

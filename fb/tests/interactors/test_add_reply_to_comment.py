@@ -14,7 +14,7 @@ class TestAddReplyToComment(unittest.TestCase):
         comment_text = "comment"
         created_comment_id = 2
         mock_response = {"comment_id": created_comment_id}
-        mock_storage.parent_comment_id.return_value = None
+        mock_storage.get_parent_comment_id.return_value = None
         mock_storage.add_reply_to_comment_interactor.return_value = created_comment_id
         mock_json_presenter.create_comment_response.return_value = mock_response
 
@@ -24,7 +24,7 @@ class TestAddReplyToComment(unittest.TestCase):
             comment_id, commenter_id,
             comment_text)
 
-        mock_storage.parent_comment_id.assert_called_once_with(comment_id)
+        mock_storage.get_parent_comment_id.assert_called_once_with(comment_id)
         mock_storage.add_reply_to_comment_interactor.assert_called_once_with(comment_id,
                                                                              commenter_id,
                                                                              comment_text)
@@ -42,7 +42,7 @@ class TestAddReplyToComment(unittest.TestCase):
         comment_text = "comment"
         created_comment_id = 3
         mock_response = {"comment_id": created_comment_id}
-        mock_storage.parent_comment_id.return_value = 1
+        mock_storage.get_parent_comment_id.return_value = 1
         mock_storage.add_reply_to_comment_interactor.return_value = created_comment_id
         mock_json_presenter.create_comment_response.return_value = mock_response
 
@@ -52,7 +52,7 @@ class TestAddReplyToComment(unittest.TestCase):
             reply_id, commenter_id,
             comment_text)
 
-        mock_storage.parent_comment_id.assert_called_once_with(reply_id)
+        mock_storage.get_parent_comment_id.assert_called_once_with(reply_id)
         mock_storage.add_reply_to_comment_interactor.assert_called_once_with(comment_id,
                                                                              commenter_id,
                                                                              comment_text)
