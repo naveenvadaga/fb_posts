@@ -4,7 +4,7 @@ from ..storages.storage import PersonWithReactionDto, CommentDto, UserPostDto, \
     PostMetricsDto, CommentWithPersonDto
 
 
-class JsonPresenter:
+class Presenter:
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
@@ -29,7 +29,8 @@ class JsonPresenter:
         pass
 
     @abc.abstractmethod
-    def get_user_reacted_posts_response(self, list_of_posts_id: List[int]) -> dict:
+    def get_user_reacted_posts_response(self,
+                                        list_of_posts_id: List[int]) -> dict:
         pass
 
     @abc.abstractmethod
@@ -37,11 +38,13 @@ class JsonPresenter:
         pass
 
     @abc.abstractmethod
-    def get_positive_reacted_posts_response(self, list_positive_posts: List[int]) -> dict:
+    def get_more_positive_reacted_posts_response(self, list_positive_posts: List[
+        int]) -> dict:
         pass
 
     @abc.abstractmethod
-    def get_comment_replies_response(self, replies: List[CommentWithPersonDto]) -> dict:
+    def get_comment_replies_response(self, replies: List[
+        CommentWithPersonDto]) -> dict:
         pass
 
     @abc.abstractmethod

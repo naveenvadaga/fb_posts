@@ -103,7 +103,8 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def react_to_post(self, reacted_by_id: int, post_id: int, reaction_type: str) -> int:
+    def react_to_post(self, reacted_by_id: int, post_id: int,
+                      reaction_type: str) -> int:
         pass
 
     @abc.abstractmethod
@@ -112,8 +113,8 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def get_post_reactions(self, post_id: int, offset: int, limit: int) -> List[
-         PersonWithReactionDto]:
+    def get_post_reactions(self, post_id: int, offset: int, limit: int) -> \
+    List[PersonWithReactionDto]:
         pass
 
     @abc.abstractmethod
@@ -133,12 +134,13 @@ class Storage:
         pass
 
     @abc.abstractmethod
-    def is_id_comment(self, comment_id: int) -> None:
+    def is_id_comment(self, comment_id: int) -> bool:
         pass
 
     @abc.abstractmethod
-    def get_comment_replies(self, comment_id: int, offset: int, limit: int) -> List[
-         CommentWithPersonDto]:
+    def get_comment_replies(self, comment_id: int, offset: int, limit: int) -> \
+    List[
+        CommentWithPersonDto]:
         pass
 
     @abc.abstractmethod
@@ -151,5 +153,5 @@ class Storage:
 
     @abc.abstractmethod
     def get_user_posts(self, person_id: int, offset: int, limit: int) -> List[
-         UserPostDto]:
+        UserPostDto]:
         pass

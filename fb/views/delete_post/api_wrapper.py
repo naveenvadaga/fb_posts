@@ -7,15 +7,15 @@ from .validator_class import ValidatorClass
 def api_wrapper(*args, **kwargs):
     post_id = kwargs['post_id']
 
-    from fb.presenters.json_presenter import Presenter
-    from fb.storages.storage import StorageClass
+    from fb.presenters.json_presenter import JsonPresenter
+    from fb.storages.storage import StorageImplementer
     from fb.interactors.post_interactor import PostInteractor
-    json_presenter = Presenter()
-    storage = StorageClass()
+    json_presenter = JsonPresenter()
+    storage = StorageImplementer()
     post_interactor = PostInteractor(json_presenter, storage)
     from django_swagger_utils.drf_server.exceptions import BadRequest
     try:
-        post_interactor.delete_post_interactor(post_id)
+        post_interactor.delete_post(post_id)
         return
     except BadRequest:
         raise BadRequest('Invalid post id', 'INVALID_POST_ID')

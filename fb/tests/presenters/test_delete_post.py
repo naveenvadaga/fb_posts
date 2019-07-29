@@ -6,6 +6,7 @@ from django_swagger_utils.drf_server.exceptions import BadRequest
 class TestRaiseInvalidPostId(unittest.TestCase):
 
     def test_raise_invalid_post_id_raise_exception(self):
-        json_presenter = Presenter()
+        json_presenter = JsonPresenter()
+
         with self.assertRaises(BadRequest):
             json_presenter.raise_invalid_post_id()

@@ -6,17 +6,17 @@ from .validator_class import ValidatorClass
 
 @validate_decorator(validator_class=ValidatorClass)
 def api_wrapper(*args, **kwargs):
-    from fb.presenters.json_presenter import Presenter
-    from fb.storages.storage import StorageClass
+    from fb.presenters.json_presenter import JsonPresenter
+    from fb.storages.storage import StorageImplementer
     from fb.interactors.comment_interactor import CommentInteractor
     comment_id = kwargs['comment_id']
     offset = kwargs['request_query_params']['offset']
     limit = kwargs['request_query_params']['limit']
-    json_presenter = Presenter()
-    storage = StorageClass()
+    json_presenter = JsonPresenter()
+    storage = StorageImplementer()
     comment_interactor = CommentInteractor(json_presenter, storage)
     try:
-        response = comment_interactor.get_comment_replies_interactor(comment_id, offset, limit)
+        response = comment_interactor.get_comment_replies(comment_id, offset, limit)
         return response
     except SuspiciousOperation:
         from django_swagger_utils.drf_server.exceptions import BadRequest

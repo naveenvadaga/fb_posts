@@ -8,9 +8,10 @@ class TestPostMetrics(unittest.TestCase):
         post_metrics_dto_1 = PostMetricsDto("haha", 2)
         post_metrics_dto_2 = PostMetricsDto("wow", 1)
         post_metrics_dto_3 = PostMetricsDto("like", 1)
-        metrics_list = [post_metrics_dto_1, post_metrics_dto_2, post_metrics_dto_3]
+        metrics_list = [post_metrics_dto_1, post_metrics_dto_2,
+                        post_metrics_dto_3]
 
-        json_presenter = Presenter()
+        json_presenter = JsonPresenter()
         response = json_presenter.get_post_metrics_response(metrics_list)
         response_reaction_metrics = response['reactions']
         test_metrics = {}

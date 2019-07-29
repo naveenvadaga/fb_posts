@@ -6,11 +6,11 @@ from .validator_class import ValidatorClass
 @validate_decorator(validator_class=ValidatorClass)
 def api_wrapper(*args, **kwargs):
     post_id = kwargs['post_id']
-    from fb.presenters.json_presenter import Presenter
-    from fb.storages.storage import StorageClass
+    from fb.presenters.json_presenter import JsonPresenter
+    from fb.storages.storage import StorageImplementer
     from fb.interactors.post_interactor import PostInteractor
-    json_presenter = Presenter()
-    storage = StorageClass()
+    json_presenter = JsonPresenter()
+    storage = StorageImplementer()
     post_interactor = PostInteractor(json_presenter, storage)
-    response = post_interactor.get_post_metrics_interactor(post_id)
+    response = post_interactor.get_post_metrics(post_id)
     return response

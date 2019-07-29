@@ -8,11 +8,11 @@ def api_wrapper(*args, **kwargs):
     post_id = kwargs['post_id']
     offset = kwargs['request_query_params']['offset']
     limit = kwargs['request_query_params']['limit']
-    from fb.presenters.json_presenter import Presenter
-    from fb.storages.storage import StorageClass
+    from fb.presenters.json_presenter import JsonPresenter
+    from fb.storages.storage import StorageImplementer
     from fb.interactors.post_interactor import PostInteractor
-    json_presenter = Presenter()
-    storage = StorageClass()
+    json_presenter = JsonPresenter()
+    storage = StorageImplementer()
     post_interactor = PostInteractor(json_presenter, storage)
-    response = post_interactor.get_post_reactions_interactor(post_id, offset, limit)
+    response = post_interactor.get_post_reactions(post_id, offset, limit)
     return response
